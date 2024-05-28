@@ -1,0 +1,82 @@
+
+.contenitore {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    float: left;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #999;
+    background-color: white;
+    -webkit-box-shadow: 3px 2px 15px 3px #000000; 
+    box-shadow: 3px 2px 15px 3px #000000;
+   /*  opacity: .75; */
+}
+
+.header {
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    float: left;
+    border-bottom: 1px solid #999;;
+}
+
+.corpo {
+    width: 100%;
+    height: calc(80vh - 40px);
+    text-align: left;
+    float: left;
+}
+
+.footer {
+    width: 100%;
+    height: calc(20vh - 40px);
+    float: left;
+    text-align: left;
+    border-top: 1px solid #999;
+}
+
+.immagineWait {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    padding-left: 47%;
+    padding-top: 35%;
+}
+
+.immagineTabella {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.attenderePrego {
+    width: 100%;
+    height: 100%;
+    /* background-color: black;
+    opacity: .75; */
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+.riga {
+    width: 100%;
+    float: left;
+}
+
+.titolo {
+
+}
+
+.oreLavorate {
+
+}
+
+.dettaglio {
+
+}
+
+.immagine {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
