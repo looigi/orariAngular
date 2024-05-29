@@ -1,14 +1,28 @@
 <div class="contenitore">
     <div *ngIf="datiGiornata" class="header">
         <!-- HEADER -->
-        <div style="width: 70%; float: left;">
-            <span class="titolo">{{nomeGiornoAttuale}}</span>
+        <div style="width: 70%; float: left; height: calc(100% - 3px);">
+            <div style="width: 15%; float: left; height: 100%;">
+                <span class="titolone" (click)="mostraCalendario = true">{{numeroGiornoAttuale}}</span>
+            </div>
+            <div style="width: 85%; float: left; height: 100%;">
+                <div style="width: 100%; height: 50%; float: left; text-align: left;">
+                    <span class="titolo" (click)="mostraCalendario = true">{{nomeGiornoAttuale}}</span>
+                </div>
+                <div style="width: 100%; height: 50%; float: left;">
+                    <div class="blocco" style="margin-left: 3px; font-size: 10px; text-align: left; background-color: #fffdda;" 
+                        [innerHTML]="ricorrenze">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div style="width: 30%; float: left;">
-            <span class="titolo">
-                {{datiGiornata.Santo}}<br />
-                Giorno dell'anno {{giornoDellAnno}}
-            </span>
+        <div style="width: calc(30% - 6px); float: left; height: calc(100% - 6px); padding: 3px;">
+            <div class="blocco">
+                <span class="titoloSanto">
+                    {{datiGiornata.Santo}}<br />
+                    Giorno dell'anno {{giornoDellAnno}}
+                </span>
+            </div>
         </div>
     </div>
 
@@ -19,132 +33,135 @@
             </div>
         </div>
 
-        <div style="width: calc(100%  - 25px); height: calc(30% - 6px); float: left;">
-            <div style="width: calc(70% - 6px); float: left; padding: 3px;">
+        <div style="width: 100%; height: calc(30% - 6px); float: left;">
+            <div style="width: calc(70% - 6px); float: left; height: calc(100% - 10px); padding: 3px;">
                 <!-- DETTAGLIO GIORNATA -->
-                <div class="riga">
-                    <div *ngIf="modalitaInsert">
-                        <table style="width: 100%; border: 1px solid #999;" cellapdding="0" cellspacing = "0">
-                            <tr>
-                                <td>Lavoro</td>
-                                <td><input type="checkbox" [checked]="tipoOre == 1" (click)="cambioTipoOre(1)" /></td>
-                                <td>Ferie</td>
-                                <td><input type="checkbox" [checked]="tipoOre == 2" (click)="cambioTipoOre(2)" /></td>
-                                <td>Permesso</td>
-                                <td><input type="checkbox" [checked]="tipoOre == 3" (click)="cambioTipoOre(3)" /></td>
-                                <td>Malattia</td>
-                                <td><input type="checkbox" [checked]="tipoOre == 4" (click)="cambioTipoOre(4)" /></td>
-                                <td>Altro</td>
-                                <td><input type="checkbox" [checked]="tipoOre == 5" (click)="cambioTipoOre(5)" /></td>
-                                <td>Lavoro da casa</td>
-                                <td><input type="checkbox" [checked]="tipoOre == 6" (click)="cambioTipoOre(6)" /></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <div *ngIf="tipoOre == 1" class="riga">
-                    <div style="width: 30%; float: left;">
-                        Ore Lavorate:
-                    </div>
-                    <div style="width: 70%; float: left;">
-                        <div *ngIf="!modalitaInsert">
-                            {{oreLavorate}}
-                        </div>
+                <div class="blocco" style="height: calc(100% - 0px);">
+                    <div class="riga">
                         <div *ngIf="modalitaInsert">
-                            <input type="text" [(ngModel)]="oreLavorate" style="width: 50%;" />
+                            <table style="width: 100%; border: 1px solid #999;" cellapdding="0" cellspacing = "0">
+                                <tr>
+                                    <td>Lavoro</td>
+                                    <td><input type="checkbox" [checked]="tipoOre == 1" (click)="cambioTipoOre(1)" /></td>
+                                    <td>Ferie</td>
+                                    <td><input type="checkbox" [checked]="tipoOre == 2" (click)="cambioTipoOre(2)" /></td>
+                                    <td>Permesso</td>
+                                    <td><input type="checkbox" [checked]="tipoOre == 3" (click)="cambioTipoOre(3)" /></td>
+                                    <td>Malattia</td>
+                                    <td><input type="checkbox" [checked]="tipoOre == 4" (click)="cambioTipoOre(4)" /></td>
+                                    <td>Altro</td>
+                                    <td><input type="checkbox" [checked]="tipoOre == 5" (click)="cambioTipoOre(5)" /></td>
+                                    <td>Lavoro da casa</td>
+                                    <td><input type="checkbox" [checked]="tipoOre == 6" (click)="cambioTipoOre(6)" /></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
-                </div>
-                <br />
 
-                <div *ngIf="tipoOre == 1" class="riga">
-                    <div style="width: 30%; float: left;">
-                        Entrata:
-                    </div>
-                    <div style="width: 70%; float: left;">
-                        <div *ngIf="!modalitaInsert">
-                            {{datiGiornata.Entrata}}
-                        </div>
-                        <div *ngIf="modalitaInsert">
-                            <input type="text" [(ngModel)]="datiGiornata.Entrata" style="width: 50%;" />
-                        </div>
-                    </div>
-                </div>
-                <br />
-
-                <div *ngIf="tipoOre == 1" class="riga">
-                    <div style="width: 30%; float: left;">
-                        Lavoro:
-                    </div>
-                    <div style="width: 70%; float: left;">
-                        <div *ngIf="!modalitaInsert">
-                            {{datiGiornata.Lavoro}}
-                        </div>
-                    </div>
-                    <div *ngIf="modalitaInsert">
-                        <select [(ngModel)]="datiGiornata.Lavoro" (click)="clickLavoro()">
-                            <option *ngFor="let lavori of dati.Lavori" 
-                                [value]="lavori.Lavoro" 
-                                [attr.selected]="lavori.idLavoro == datiGiornata.idLavoro ? true : null">
-                                {{lavori.Lavoro}}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <br />
-
-                <div *ngIf="tipoOre == 1" class="riga">
-                    <div style="width: 30%; float: left;">
-                        Commessa:
-                    </div>
-                    <div style="width: 70%; float: left;">
-                        <div *ngIf="!modalitaInsert">
-                            {{datiGiornata.Commessa}}
-                        </div>
-                        <div *ngIf="modalitaInsert">
-                            <select [(ngModel)]="datiGiornata.Commessa" (click)="clickCommessa()">
-                                <option *ngFor="let c of commesse" 
-                                    [value]="c.Descrizione" 
-                                    [attr.selected]="c.idCommessa == datiGiornata.codCommessa ? true : null">
-                                    {{c.Descrizione}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <br />
-            </div>
-
-            <div style="width: calc(30% - 15px); float: left; height: calc(100% - 6px); border-left: 1px solid #999; padding: 3px;">
-                <!-- TEMPO -->
-                <div *ngIf="!datiGiornata.Tempo">
-                    &nbsp;
-                </div>
-                <div *ngIf="datiGiornata.Tempo && tipoOre == 1" class="dettaglio">
-                    <div style="width: 30%; float: left;">
-                        Tempo:
-                    </div>
-                    <div style="width: 70%; float: left;">
-                        <div *ngIf="!modalitaInsert">
-                            {{datiGiornata.Tempo}} ({{datiGiornata.Gradi}}°)
-                        </div>
-                        <div *ngIf="modalitaInsert">
-                            <select [(ngModel)]="datiGiornata.Tempo" (click)="clickTempo()">
-                                <option *ngFor="let tempi of dati.Tempi" 
-                                    [value]="tempi.Tempo" 
-                                    [attr.selected]="tempi.Tempo == datiGiornata.Tempo ? true : null">
-                                    {{tempi.Tempo}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div *ngIf="modalitaInsert">
+                    <div *ngIf="tipoOre == 1" class="riga">
                         <div style="width: 30%; float: left;">
-                            Gradi:
+                            Ore Lavorate:
                         </div>
                         <div style="width: 70%; float: left;">
-                            <input type="text" [(ngModel)]="datiGiornata.Gradi" style="width: 50%;" />
+                            <div *ngIf="!modalitaInsert">
+                                {{oreLavorate}}
+                            </div>
+                            <div *ngIf="modalitaInsert">
+                                <input type="text" [(ngModel)]="oreLavorate" style="width: 50%;" />
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div *ngIf="tipoOre == 1" class="riga">
+                        <div style="width: 30%; float: left;">
+                            Entrata:
+                        </div>
+                        <div style="width: 70%; float: left;">
+                            <div *ngIf="!modalitaInsert">
+                                {{datiGiornata.Entrata}}
+                            </div>
+                            <div *ngIf="modalitaInsert">
+                                <input type="text" [(ngModel)]="datiGiornata.Entrata" style="width: 50%;" />
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div *ngIf="tipoOre == 1" class="riga">
+                        <div style="width: 30%; float: left;">
+                            Lavoro:
+                        </div>
+                        <div style="width: 70%; float: left;">
+                            <div *ngIf="!modalitaInsert">
+                                {{datiGiornata.Lavoro}}
+                            </div>
+                        </div>
+                        <div *ngIf="modalitaInsert">
+                            <select [(ngModel)]="datiGiornata.Lavoro" (click)="clickLavoro()">
+                                <option *ngFor="let lavori of dati.Lavori" 
+                                    [value]="lavori.Lavoro" 
+                                    [attr.selected]="lavori.idLavoro == datiGiornata.idLavoro ? true : null">
+                                    {{lavori.Lavoro}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div *ngIf="tipoOre == 1" class="riga">
+                        <div style="width: 30%; float: left;">
+                            Commessa:
+                        </div>
+                        <div style="width: 70%; float: left;">
+                            <div *ngIf="!modalitaInsert">
+                                {{datiGiornata.Commessa}}
+                            </div>
+                            <div *ngIf="modalitaInsert">
+                                <select [(ngModel)]="datiGiornata.Commessa" (click)="clickCommessa()">
+                                    <option *ngFor="let c of commesse" 
+                                        [value]="c.Descrizione" 
+                                        [attr.selected]="c.idCommessa == datiGiornata.codCommessa ? true : null">
+                                        {{c.Descrizione}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="width: calc(30% - 7px); float: left; height: calc(100% - 6px); border-left: 1px solid #999; padding: 3px;">
+                <!-- TEMPO -->
+                <div class="blocco" style="height: calc(100% - 4px);">
+                    <div *ngIf="tipoOre == 1" class="dettaglio">
+                        <div *ngIf="giornoInserito || modalitaInsert" style="width: 30%; float: left;">
+                            Tempo:
+                        </div>
+                        <div *ngIf="!giornoInserito && !modalitaInsert" style="width: 30%; float: left;">
+                            &nbsp;
+                        </div>
+                        <div style="width: 70%; float: left;">
+                            <div *ngIf="giornoInserito && !modalitaInsert">
+                                {{datiGiornata.Tempo}} <span *ngIf="datiGiornata.Gradi">({{datiGiornata.Gradi}}°)</span>
+                            </div>
+                            <div *ngIf="modalitaInsert">
+                                <select [(ngModel)]="datiGiornata.Tempo" (click)="clickTempo()">
+                                    <option *ngFor="let tempi of dati.Tempi" 
+                                        [value]="tempi.Tempo" 
+                                        [attr.selected]="tempi.Tempo == datiGiornata.Tempo ? true : null">
+                                        {{tempi.Tempo}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div *ngIf="modalitaInsert">
+                            <div style="width: 30%; float: left;">
+                                Gradi:
+                            </div>
+                            <div style="width: 70%; float: left;">
+                                <input type="text" [(ngModel)]="datiGiornata.Gradi" style="width: 50%;" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -158,66 +175,71 @@
                 <div style="width: 100%; height: 23px; float: left; text-align: center; background-color: #e7e5e5;">
                     Pranzo
                 </div>
-                <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.Pranzo && datiGiornata.Pranzo.length > 0">
-                    <div *ngFor="let pranzo of datiGiornata.Pranzo">
-                        <div *ngIf="!modalitaInsert">
-                            {{pranzo.Portata}}
+
+                <div class="blocco" style="margin-top: 25px; height: calc(100% - 35px);">
+                    <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.Pranzo && datiGiornata.Pranzo.length > 0">
+                        <div *ngFor="let pranzo of datiGiornata.Pranzo">
+                            <div *ngIf="!modalitaInsert">
+                                {{pranzo.Portata}}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div *ngIf="modalitaInsert">
-                    <div style="width: 40%; float: left; margin-bottom: 3px;">
-                        Portata:
+                    <div *ngIf="modalitaInsert">
+                        <div style="width: 40%; float: left; margin-bottom: 3px;">
+                            Portata:
+                        </div>
+                        <div style="width: 60%; float: left; margin-bottom: 3px;">
+                            <select [(ngModel)]="datiGiornata.Pranzo.Portata" (click)="clickPranzo()" style="width: 100%;">
+                                <option *ngFor="let p of dati.Portate"
+                                    [value]="p.Portata" 
+                                    [attr.selected]="p.Portata == datiGiornata.Pranzo.Portata ? true : null">
+                                    {{p.Portata}}
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
+                            <tr *ngFor="let pranzo of datiGiornata.Pranzo">
+                                <td>
+                                    {{pranzo.Portata}}
+                                </td>
+                                <td>
+                                    <img src="assets/immagini/icona_ELIMINA-TAG.png" class="immagineTabella" (click)="eliminaPranzo(pranzo)" />
+                                </td>
+                                <td>
+                                    <img src="assets/immagini/icona_SU.png" class="immagineTabella" (click)="spostaSuPranzo(pranzo)" />
+                                </td>
+                                <td>
+                                    <img src="assets/immagini/icona_GIU.png" class="immagineTabella" (click)="spostaGiuPranzo(pranzo)" />
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div style="width: 60%; float: left; margin-bottom: 3px;">
-                        <select [(ngModel)]="datiGiornata.Pranzo" (click)="clickTempo()" style="width: 100%;">
-                            <option *ngFor="let p of dati.Portate" 
-                                [value]="p.Portata" 
-                                [attr.selected]="p.Portata == datiGiornata.Pranzo ? true : null">
-                                {{p.Portata}}
-                            </option>
-                        </select>
-                    </div>
-                    
-                    <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
-                        <tr *ngFor="let pranzo of datiGiornata.Pranzo">
-                            <td>
-                                {{pranzo.Portata}}
-                            </td>
-                            <td>
-                                <img src="assets/immagini/icona_ELIMINA-TAG.png" class="immagineTabella" (click)="eliminaPranzo(pranzo)" />
-                            </td>
-                            <td>
-                                <img src="assets/immagini/icona_SU.png" class="immagineTabella" (click)="spostaSuPranzo(pranzo)" />
-                            </td>
-                            <td>
-                                <img src="assets/immagini/icona_GIU.png" class="immagineTabella" (click)="spostaGiuPranzo(pranzo)" />
-                            </td>
-                        </tr>
-                    </table>
                 </div>
             </div>
             <div style="width: calc(50% - 7px); float: left; border-left: 1px solid #999; height: calc(100% - 6px); padding: 3px;">
                 <div style="width: 100%; height: 23px; float: left; text-align: center; background-color: #e7e5e5;">
                     Pasticca
                 </div>
-                <div *ngIf="tipoOre == 1 && datiGiornata">
-                    <div *ngIf="!modalitaInsert">
-                        {{datiGiornata.Pasticca}}
-                    </div>
-                    <div *ngIf="modalitaInsert">
-                        <div style="width: 40%; float: left; margin-bottom: 3px;">
-                            Pasticca:
+                <div class="blocco" style="margin-top: 25px; height: calc(100% - 29px);">
+                    <div *ngIf="tipoOre == 1 && datiGiornata">
+                        <div *ngIf="!modalitaInsert">
+                            {{datiGiornata.Pasticca}}
                         </div>
-                        <div style="width: 60%; float: left; margin-bottom: 3px;">
-                            <select [(ngModel)]="datiGiornata.Pasticca" (click)="clickPasticca()" style="width: 100%;">
-                                <option *ngFor="let p of dati.Pasticche" 
-                                    [value]="p.Pasticca" 
-                                    [attr.selected]="p.Pasticca == datiGiornata.Pasticca ? true : null">
-                                    {{p.Pasticca}}
-                                </option>
-                            </select>
+                        <div *ngIf="modalitaInsert">
+                            <div style="width: 40%; float: left; margin-bottom: 3px;">
+                                Pasticca:
+                            </div>
+                            <div style="width: 60%; float: left; margin-bottom: 3px;">
+                                <select [(ngModel)]="datiGiornata.Pasticca" (click)="clickPasticca()" style="width: 100%;">
+                                    <option *ngFor="let p of dati.Pasticche" 
+                                        [value]="p.Pasticca" 
+                                        [attr.selected]="p.Pasticca == datiGiornata.Pasticca ? true : null">
+                                        {{p.Pasticca}}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -230,45 +252,47 @@
                 <div style="width: 100%; height: 23px; float: left; text-align: center; background-color: #e7e5e5;">
                     Mezzi di Andata
                 </div>
-                <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.MezziAndata && datiGiornata.MezziAndata.length > 0">
-                    <div *ngIf="!modalitaInsert">
-                        <div *ngFor="let mezzo of datiGiornata.MezziAndata">
-                            {{mezzo.Mezzo}} {{mezzo.Dettaglio}}
+                <div class="blocco" style="margin-top: 25px; height: calc(100% - 29px);">
+                    <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.MezziAndata && datiGiornata.MezziAndata.length > 0">
+                        <div *ngIf="!modalitaInsert">
+                            <div *ngFor="let mezzo of datiGiornata.MezziAndata">
+                                {{mezzo.Mezzo}} {{mezzo.Dettaglio}}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div *ngIf="modalitaInsert">
-                    <div style="width: 40%; float: left; margin-bottom: 3px;">
-                        Mezzo:
+                    <div *ngIf="modalitaInsert">
+                        <div style="width: 40%; float: left; margin-bottom: 3px;">
+                            Mezzo:
+                        </div>
+                        <div style="width: 60%; float: left; margin-bottom: 3px;">
+                            <select [(ngModel)]="mezzoAndataScelto" (click)="clickAggiungeMezzoAndata()" style="width: 100%;">
+                                <option *ngFor="let m of dati.Mezzi">
+                                    {{m.Mezzo}} {{m.Dettaglio}}
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
+                            <tr *ngFor="let mezzo of datiGiornata.MezziAndata">
+                                <td>
+                                    {{mezzo.Mezzo}}
+                                </td>
+                                <td>
+                                    {{mezzo.Dettaglio}}
+                                </td>
+                                <td>
+                                    <img src="assets/immagini/icona_ELIMINA-TAG.png" class="immagineTabella" (click)="eliminaMezzoDiAndata(mezzo)" />
+                                </td>
+                                <td>
+                                    <img src="assets/immagini/icona_SU.png" class="immagineTabella" (click)="spostaSuMezzoDiAndata(mezzo)" />
+                                </td>
+                                <td>
+                                    <img src="assets/immagini/icona_GIU.png" class="immagineTabella" (click)="spostaGiuMezzoDiAndata(mezzo)" />
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div style="width: 60%; float: left; margin-bottom: 3px;">
-                        <select [(ngModel)]="mezzoAndataScelto" (click)="clickAggiungeMezzoAndata()" style="width: 100%;">
-                            <option *ngFor="let m of dati.Mezzi">
-                                {{m.Mezzo}} {{m.Dettaglio}}
-                            </option>
-                        </select>
-                    </div>
-                    
-                    <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
-                        <tr *ngFor="let mezzo of datiGiornata.MezziAndata">
-                            <td>
-                                {{mezzo.Mezzo}}
-                            </td>
-                            <td>
-                                {{mezzo.Dettaglio}}
-                            </td>
-                            <td>
-                                <img src="assets/immagini/icona_ELIMINA-TAG.png" class="immagineTabella" (click)="eliminaMezzoDiAndata(mezzo)" />
-                            </td>
-                            <td>
-                                <img src="assets/immagini/icona_SU.png" class="immagineTabella" (click)="spostaSuMezzoDiAndata(mezzo)" />
-                            </td>
-                            <td>
-                                <img src="assets/immagini/icona_GIU.png" class="immagineTabella" (click)="spostaGiuMezzoDiAndata(mezzo)" />
-                            </td>
-                        </tr>
-                    </table>
                 </div>
             </div>
 
@@ -276,45 +300,48 @@
                 <div style="width: 100%; height: 23px; float: left; text-align: center; background-color: #e7e5e5;">
                     Mezzi di Ritorno
                 </div>
-                <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.MezziRitorno && datiGiornata.MezziRitorno.length > 0">
-                    <div *ngFor="let mezzo of datiGiornata.MezziRitorno">
-                        <div *ngIf="!modalitaInsert">
-                            {{mezzo.Mezzo}} {{mezzo.Dettaglio}}
+
+                <div class="blocco" style="margin-top: 25px; height: calc(100% - 29px);">
+                    <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.MezziRitorno && datiGiornata.MezziRitorno.length > 0">
+                        <div *ngFor="let mezzo of datiGiornata.MezziRitorno">
+                            <div *ngIf="!modalitaInsert">
+                                {{mezzo.Mezzo}} {{mezzo.Dettaglio}}
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div *ngIf="modalitaInsert">
-                    <div style="width: 40%; float: left; margin-bottom: 3px;">
-                        Mezzo:
+                    <div *ngIf="modalitaInsert">
+                        <div style="width: 40%; float: left; margin-bottom: 3px;">
+                            Mezzo:
+                        </div>
+                        <div style="width: 60%; float: left; margin-bottom: 3px;">
+                            <select [(ngModel)]="mezzoRitornoScelto" (click)="clickAggiungeMezzoRitorno()" style="width: 100%;">
+                                <option *ngFor="let m of dati.Mezzi">
+                                    {{m.Mezzo}} {{m.Dettaglio}}
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
+                            <tr *ngFor="let mezzo of datiGiornata.MezziRitorno">
+                                <td>
+                                    {{mezzo.Mezzo}}
+                                </td>
+                                <td>
+                                    {{mezzo.Dettaglio}}
+                                </td>
+                                <td>
+                                    <img src="assets/immagini/icona_ELIMINA-TAG.png" class="immagineTabella" (click)="eliminaMezzoDiRitorno(mezzo)" />
+                                </td>
+                                <td>
+                                    <img src="assets/immagini/icona_SU.png" class="immagineTabella" (click)="spostaSuMezzoDiRitorno(mezzo)" />
+                                </td>
+                                <td>
+                                    <img src="assets/immagini/icona_GIU.png" class="immagineTabella" (click)="spostaGiuMezzoDiRitorno(mezzo)" />
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div style="width: 60%; float: left; margin-bottom: 3px;">
-                        <select [(ngModel)]="mezzoRitornoScelto" (click)="clickAggiungeMezzoRitorno()" style="width: 100%;">
-                            <option *ngFor="let m of dati.Mezzi">
-                                {{m.Mezzo}} {{m.Dettaglio}}
-                            </option>
-                        </select>
-                    </div>
-                    
-                    <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
-                        <tr *ngFor="let mezzo of datiGiornata.MezziRitorno">
-                            <td>
-                                {{mezzo.Mezzo}}
-                            </td>
-                            <td>
-                                {{mezzo.Dettaglio}}
-                            </td>
-                            <td>
-                                <img src="assets/immagini/icona_ELIMINA-TAG.png" class="immagineTabella" (click)="eliminaMezzoDiRitorno(mezzo)" />
-                            </td>
-                            <td>
-                                <img src="assets/immagini/icona_SU.png" class="immagineTabella" (click)="spostaSuMezzoDiRitorno(mezzo)" />
-                            </td>
-                            <td>
-                                <img src="assets/immagini/icona_GIU.png" class="immagineTabella" (click)="spostaGiuMezzoDiRitorno(mezzo)" />
-                            </td>
-                        </tr>
-                    </table>
                 </div>
             </div>
         </div>
@@ -324,10 +351,12 @@
             <div style="width: 100%; height: 23px; float: left; text-align: center; background-color: #e7e5e5;">
                 Note
             </div>
-            <div *ngIf="!modalitaInsert" style="white-space: break-spaces; width: 100%; height: 100%;" [innerHTML]="datiGiornata.Notelle">
-            </div>
-            <div *ngIf="modalitaInsert" style="width: calc(100% - 7px); height: 100%;">
-                <textarea [(ngModel)]="datiGiornata.Notelle" style="width: 100%; height: calc(100% - 33px); margin-top: 3px;"></textarea>
+            <div class="blocco" style="margin-top: 10px; height: calc(100% - 29px);">
+                <div *ngIf="!modalitaInsert" style="white-space: break-spaces; width: 100%; height: 100%;" [innerHTML]="datiGiornata.Notelle">
+                </div>
+                <div *ngIf="modalitaInsert" style="width: calc(100% - 7px); height: 100%;">
+                    <textarea [(ngModel)]="datiGiornata.Notelle" style="width: 100%; height: calc(100% - 10px); margin-top: 3px;"></textarea>
+                </div>
             </div>
         </div>
      </div>
@@ -361,9 +390,24 @@
     (visibile)="modificaGiorno = !modificaGiorno"
 ></modificagiorno-component> -->
 
+<div *ngIf="mostraCalendario" class="calendario">
+    <div style="float: left; width: 220px; margin-top: 2px; height: auto;">
+        <app-calendario
+            [Utils]="Utils"
+            [apreConHover]="false"
+            [chiusuraAutomatica]="false"
+            [dataPassata]="dataAttuale"
+            [larghezzaData]="200"
+
+            (dataSelezionata)="impostaData($event)"
+        >
+        </app-calendario>
+    </div>
+    <div style="float: left; width: 25px; height: 25px;">
+        <img src="assets/immagini/elimina_quadrato.png" class="immagineTabella"  (click)="mostraCalendario = false" />
+    </div>
+</div>
+
 <div *ngIf="VariabiliGlobali.CaricamentoInCorso" class="attenderePrego">
     <img src="assets/immagini/Processing.gif" class="immagineWait" />
 </div>
-
-
-

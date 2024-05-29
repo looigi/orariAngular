@@ -13,7 +13,9 @@ export class AppComponent implements OnInit {
   title = 'Orari';
 
   dataAttuale;
+  mesi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
   nomeGiornoAttuale;
+  numeroGiornoAttuale;
   appoggioDatiGiornata;
   giornoDellAnno;
   datiGiornata;
@@ -25,6 +27,13 @@ export class AppComponent implements OnInit {
   commesse;
   mezzoAndataScelto;
   mezzoRitornoScelto;
+  ricorrenze = '';
+  giornoInserito = false;
+  mostraCalendario = false;
+
+  Utils = {
+    linkIcone: 'assets'
+}
 
   constructor(
     private apiService: ApiService,
@@ -80,8 +89,12 @@ export class AppComponent implements OnInit {
     );
   }   
   
-  caricaCommesse() {
-    this.apiService.ritornaCommesse(this.datiGiornata.idLavoro)
+  caricaCommesse(forzaID) {
+    let idLavoro = this.datiGiornata.idLavoro;
+    if (!this.giornoInserito && !forzaID) {
+      idLavoro = this.datiGiornata.LavoroDefault;
+    }
+    this.apiService.ritornaCommesse(idLavoro)
     .map((response: any) => response)
     .subscribe((data2: string | string[]) => {
         if (data2) {
@@ -108,6 +121,14 @@ export class AppComponent implements OnInit {
     const anno = this.dataAttuale.getFullYear();
     console.log(this.dataAttuale, giorno, mese, anno);
 
+    this.numeroGiornoAttuale = giorno;
+    let nomeGiorno = this.VariabiliGlobali.getDayName(this.dataAttuale, "it-IT");
+    if (nomeGiorno.indexOf(' ') > -1)  {
+      nomeGiorno = nomeGiorno.substring(0, nomeGiorno.indexOf(' ')).trim();
+    }
+    const nomeMese = this.mesi[this.dataAttuale.getMonth()];
+    this.nomeGiornoAttuale = nomeMese + ' ' + anno + ' - ' + nomeGiorno;
+
     this.apiService.ritornaGiornata(giorno, mese, anno)
     .map((response: any) => response)
     .subscribe((data2: string | string[]) => {
@@ -118,39 +139,44 @@ export class AppComponent implements OnInit {
               // console.log(data);
               this.datiGiornata = JSON.parse(data);
               console.log(this.datiGiornata);
+              this.giornoInserito = this.datiGiornata.GiornoInserito;
               const ore = this.datiGiornata.Quante;
               this.oreLavorate = '';
-              switch (ore) {
-                case -1:
-                  this.tipoOre = -1;
-                  this.oreLavorate = 'BOH!';
-                  break;
-                case -2:
-                  this.tipoOre = 2;
-                  this.oreLavorate = 'Ferie';
-                  break;
-                case -3:
-                  this.tipoOre = 3;
-                  this.oreLavorate = 'Permesso';
-                  break;
-                case -4:
-                  this.tipoOre = 4;
-                  this.oreLavorate = 'Malattia';
-                  break;
-                case -5:
-                  this.tipoOre = 5;
-                  this.oreLavorate = 'Altro';
-                  break;
-                case -6:
-                  this.tipoOre = 6;
-                  this.oreLavorate = 'Giorno lavorato a casa';
-                  break;
-                default:
-                  this.tipoOre = 1;
-                  this.oreLavorate = ore;  
+              this.prendeRicorrenze();
+              if (!this.giornoInserito) {
+              } else {
+                switch (ore) {
+                  case -1:
+                    this.tipoOre = -1;
+                    this.oreLavorate = 'BOH!';
+                    break;
+                  case -2:
+                    this.tipoOre = 2;
+                    this.oreLavorate = 'Ferie';
+                    break;
+                  case -3:
+                    this.tipoOre = 3;
+                    this.oreLavorate = 'Permesso';
+                    break;
+                  case -4:
+                    this.tipoOre = 4;
+                    this.oreLavorate = 'Malattia';
+                    break;
+                  case -5:
+                    this.tipoOre = 5;
+                    this.oreLavorate = 'Altro';
+                    break;
+                  case -6:
+                    this.tipoOre = 6;
+                    this.oreLavorate = 'Giorno lavorato a casa';
+                    break;
+                  default:
+                    this.tipoOre = 1;
+                    this.oreLavorate = ore;  
+                }
               }
 
-              this.caricaCommesse();
+              this.caricaCommesse(false);
             } else {
               this.pulisceArray();
             }
@@ -162,7 +188,29 @@ export class AppComponent implements OnInit {
     );
   }
 
+  prendeRicorrenze() {
+    const rico = this.datiGiornata.Ricorrenze;
+    this.ricorrenze = '';
+    rico.forEach(element => {
+      let desc = element.Descrizione;
+      while (desc.indexOf('***S***') > -1) {
+        let nome = desc.substring(desc.indexOf('***S***') + 7);
+        nome = nome.substring(0, nome.indexOf('***F***'));
+        while (nome.indexOf(' ') > -1) {
+          nome = nome.replace(' ', '+');
+        }
+        // console.log(nome);
+        desc= desc.replace('***S***', '<a href="https://www.google.com/search?q=' + nome + '" target="_blank">');
+      }
+      while (desc.indexOf('***F***') > -1) {
+        desc= desc.replace('***F***', '</a>');
+      }
+      this.ricorrenze += element.Anno + ': ' + desc + '<br />';
+    });
+  }
+
   pulisceArray() {
+    this.giornoInserito = false;
     this.datiGiornata = {
       CodCommessa: -1,
       Commessa: "",
@@ -198,7 +246,6 @@ export class AppComponent implements OnInit {
 
   disegnaGiorno() {
     this.leggeGiornataAttuale();
-    this.nomeGiornoAttuale = this.VariabiliGlobali.getDayName(this.dataAttuale, "it-IT");
     this.giornoDellAnno = this.VariabiliGlobali.calcolaGiornoAnno(this.dataAttuale);
   }
 
@@ -209,15 +256,78 @@ export class AppComponent implements OnInit {
 
   apreModifica() {
     this.appoggioDatiGiornata = JSON.parse(JSON.stringify(this.datiGiornata));
+    
+    if (!this.giornoInserito) {
+      this.oreLavorate = 8;
+      this.datiGiornata.Entrata = '08:00:00';
+
+      this.datiGiornata.idLavoro = this.datiGiornata.LavoroDefault;
+      this.dati.Lavori.forEach(element => {
+        if (element.idLavoro === this.datiGiornata.LavoroDefault) {
+          this.datiGiornata.Lavoro = element.Lavoro;
+        }
+      });
+
+      this.datiGiornata.CodCommessa = this.datiGiornata.CommessaDefault;
+      this.commesse.forEach(element => {
+        if (element.idCommessa === this.datiGiornata.CodCommessa) {
+          this.datiGiornata.Commessa = element.Descrizione;
+        }
+      });
+    }
+
+    const mezziAndata = this.datiGiornata.MezziStandardAndata;
+    const ma = new Array();
+    mezziAndata.forEach(element => {
+      const idMezzo = element.idMezzo;
+      this.dati.Mezzi.forEach(element2 => {
+        if (+idMezzo === +element2.idMezzo) {
+          const m = {
+            Mezzo: element2.Mezzo,
+            Dettaglio: element2.Dettaglio
+          }
+          ma.push(m);
+        }
+      });
+    });
+    this.datiGiornata.MezziAndata = JSON.parse(JSON.stringify(ma));  
+
+    const mezziRitorno = this.datiGiornata.MezziStandardRitorno;
+    const mr = new Array();
+    mezziRitorno.forEach(element => {
+      const idMezzo = element.idMezzo;
+      this.dati.Mezzi.forEach(element2 => {
+        if (+idMezzo === +element2.idMezzo) {
+          const m = {
+            Mezzo: element2.Mezzo,
+            Dettaglio: element2.Dettaglio
+          }
+          mr.push(m);
+        }
+      });
+    });
+    this.datiGiornata.MezziRitorno = JSON.parse(JSON.stringify(mr));
+    this.datiGiornata.Portate = new Array();
+
     this.modalitaInsert = true;
   }
 
   salvaGiornata() {
-    console.log(this.datiGiornata.Notelle);
+    // console.log(this.datiGiornata.Notelle);
+    this.giornoInserito = true;
+
     this.modalitaInsert = false;
   }
 
   annullaModifica() {
+    if (!this.giornoInserito) {
+      this.oreLavorate = '';
+      /* this.datiGiornata.Entrata = '';
+      this.datiGiornata.idLavoro = -9999;
+      this.datiGiornata.Lavoro = '';
+      this.datiGiornata.MezziAndata = new Array();
+      this.datiGiornata.MezziRitorno = new Array(); */
+    }
     this.datiGiornata = JSON.parse(JSON.stringify(this.appoggioDatiGiornata));
     this.modalitaInsert = false;
   }
@@ -227,7 +337,7 @@ export class AppComponent implements OnInit {
     this.dati.Lavori.forEach(element => {
       if (element.Lavoro === this.datiGiornata.Lavoro) {
         this.datiGiornata.idLavoro = element.idLavoro;
-        this.caricaCommesse();
+        this.caricaCommesse(true);
       }
     });
   }
@@ -241,17 +351,36 @@ export class AppComponent implements OnInit {
     });
   }
 
-  clickPasticca() {
-    /* this.dati.Pasticche.forEach(element => {
-      if (element.Pasticca === this.datiGiornata.Pasticca) {
-        this.datiGiornata.Pasticca = element.Pasticca;
-        // console.log('Commessa scelta', this.datiGiornata.codCommessa);
+  clickPranzo() {
+    if (this.datiGiornata.Pranzo) {
+      // console.log('Click Pranzo', this.datiGiornata.Pranzo.Portata);      
+      let Portata = this.datiGiornata.Pranzo.Portata;
+      if (!this.datiGiornata.Pranzo) {
+        this.datiGiornata.Pranzo = new Array();
       }
-    }); */
+      this.dati.Portate.forEach(element => {
+        if (element.Portata === Portata) {
+          let ok = true;
+          this.datiGiornata.Pranzo.forEach(element => {
+            if (Portata === element.Portata) {
+              ok = false;
+            }
+          });
+          if (ok) {
+            this.datiGiornata.Pranzo.push({
+              idPortata: element.idPortata,
+              Portata: element.Portata
+            });
+          }
+        }
+      });
+    }
+  }
+
+  clickPasticca() {
   }
 
   clickTempo() {
-
   }
 
   eliminaPranzo(p) {
@@ -296,5 +425,12 @@ export class AppComponent implements OnInit {
 
   clickAggiungeMezzoRitorno() {
     console.log('Mezzo di ritorno da aggiungere: ', this.mezzoRitornoScelto)
+  }
+
+  impostaData(e) {
+    console.log('Data impostata', e);
+    this.mostraCalendario = false;
+    this.dataAttuale = new Date(e);
+    this.disegnaGiorno();
   }
 }

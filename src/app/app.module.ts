@@ -8,6 +8,7 @@ import { VariabiliGlobali } from './VariabiliGlobali.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ModificaGiorno } from './modificagiorno/modificagiorno.component';
 import { FormsModule } from '@angular/forms';
+import { CalendarioModule } from 'calendario';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { FormsModule } from '@angular/forms';
   imports: [
     HttpClientModule,
     BrowserModule,
+    CalendarioModule,
     FormsModule
   ],
   providers: [

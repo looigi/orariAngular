@@ -13,7 +13,7 @@
 
 .header {
     width: 100%;
-    height: 60px;
+    height: 11vh;
     text-align: center;
     float: left;
     border-bottom: 1px solid #999;;
@@ -21,7 +21,7 @@
 
 .corpo {
     width: 100%;
-    height: calc(80vh - 40px);
+    height: calc(75vh - 40px);
     text-align: left;
     float: left;
 }
@@ -63,8 +63,30 @@
     float: left;
 }
 
-.titolo {
+.blocco {
+    height: calc(100% - 4px);
+    background-color: white;
+    border: 1px solid #bcbcbc;
+    border-radius: 3px;
+    padding: 2px;
+    overflow: auto;
+}
 
+.titolone {
+    font-size: 75px;
+    color: #a90303;
+    cursor: pointer;
+}
+
+.titolo {
+    font-size: 35px;
+    color: #a90303;
+    cursor: pointer;
+}
+
+.titoloSanto {
+    font-size: 30px;
+    color: #060606;
 }
 
 .oreLavorate {
@@ -79,4 +101,18 @@
     width: 30px;
     height: 30px;
     cursor: pointer;
+}
+
+.calendario {
+    width: auto;
+    height: auto;
+    left: 10%;
+    top: 5%;
+    position: absolute;
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 3px;
+    background-color: #ffd5c9;
+    -webkit-box-shadow: 3px 2px 15px 3px #000000; 
+    box-shadow: 3px 2px 15px 3px #000000;
 }
