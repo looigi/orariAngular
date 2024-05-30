@@ -1,56 +1,78 @@
 <div class="contenitore">
     <div *ngIf="datiGiornata" class="header">
         <!-- HEADER -->
-        <div style="width: 70%; float: left; height: calc(100% - 3px);">
-            <div style="width: 15%; float: left; height: 100%;">
+        <div style="width: calc(100% - 260px); float: left; height: calc(100% - 3px); text-align: left;">
+            <span class="titolone" (click)="mostraCalendario = true">{{numeroGiornoAttuale}} {{nomeGiornoAttuale}}</span>
+            <!-- <div style="width: 15%; float: left; height: 100%;">
                 <span class="titolone" (click)="mostraCalendario = true">{{numeroGiornoAttuale}}</span>
             </div>
-            <div style="width: 85%; float: left; height: 100%;">
+            <div style="width: 85%; float: left; height: 100%; text-align: left;">
                 <div style="width: 100%; height: 50%; float: left; text-align: left;">
                     <span class="titolo" (click)="mostraCalendario = true">{{nomeGiornoAttuale}}</span>
                 </div>
                 <div style="width: 100%; height: 50%; float: left;">
-                    <div class="blocco" style="margin-left: 3px; font-size: 10px; text-align: left; background-color: #fffdda;" 
+                    <div class="blocco" style="margin-left: 3px; margin-right: 3px; font-size: 10px; text-align: left; background-color: #fffdda;" 
                         [innerHTML]="ricorrenze">
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
-        <div style="width: calc(30% - 6px); float: left; height: calc(100% - 6px); padding: 3px;">
-            <div class="blocco">
+        <div style="width: 260px; float: left; height: calc(100% - 6px); padding-top: 20px;">
+            <!-- <div class="blocco">
                 <span class="titoloSanto">
-                    {{datiGiornata.Santo}}<br />
+                    S. {{datiGiornata.Santo}}<br />
                     Giorno dell'anno {{giornoDellAnno}}
                 </span>
+            </div> -->
+            <div style="width: 210px;">
+                <app-calendario
+                    [Utils]="Utils"
+                    [apreConHover]="false"
+                    [chiusuraAutomatica]="false"
+                    [dataPassata]="dataAttuale"
+                    [larghezzaData]="200"
+
+                    (dataSelezionata)="impostaData($event)"
+                >
+                </app-calendario>
             </div>
         </div>
     </div>
 
     <div *ngIf="datiGiornata" class="corpo">
-        <div style="width: calc(100% - 6px); height: 19px; float: left; text-align: center; border-bottom: 1px solid #999; padding: 3px;">
-            <div style="background-color: #e7e5e5;">
-                Dettaglio Giornata
-            </div>
-        </div>
+        <div style="width: 100%; height: calc(30% - 6px); float: left; background-color: aliceblue;">
+            <div style="width: calc(70% - 14px);
+                float: left;
+                height: calc(100% - 13px);
+                padding: 3px;
+                margin: 3px;
+                border: 1px solid #999;
+                background-color: #fffdd3;
+                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
+                box-shadow: 1px 1px 8px 0px #000000;
+                border-radius: 3px;">
+                <div style="width: 100%; height: 19px; text-align: center;">
+                    <div  class="sfondoTitolo">
+                        Dettaglio Giornata
+                    </div>
+                </div>
 
-        <div style="width: 100%; height: calc(30% - 6px); float: left;">
-            <div style="width: calc(70% - 6px); float: left; height: calc(100% - 10px); padding: 3px;">
                 <!-- DETTAGLIO GIORNATA -->
-                <div class="blocco" style="height: calc(100% - 0px);">
+                <div class="blocco" style="height: calc(100% - 26px); margin-top: 2px;">
                     <div class="riga">
                         <div *ngIf="modalitaInsert">
                             <table style="width: 100%; border: 1px solid #999;" cellapdding="0" cellspacing = "0">
                                 <tr>
-                                    <td>Lavoro</td>
-                                    <td><input type="checkbox" [checked]="tipoOre == 1" (click)="cambioTipoOre(1)" /></td>
+                                    <td class="tdDispara">Lavoro</td>
+                                    <td class="tdDispara"><input type="checkbox" [checked]="tipoOre == 1" (click)="cambioTipoOre(1)" /></td>
                                     <td>Ferie</td>
                                     <td><input type="checkbox" [checked]="tipoOre == 2" (click)="cambioTipoOre(2)" /></td>
-                                    <td>Permesso</td>
-                                    <td><input type="checkbox" [checked]="tipoOre == 3" (click)="cambioTipoOre(3)" /></td>
+                                    <td class="tdDispara">Permesso</td>
+                                    <td class="tdDispara"><input type="checkbox" [checked]="tipoOre == 3" (click)="cambioTipoOre(3)" /></td>
                                     <td>Malattia</td>
                                     <td><input type="checkbox" [checked]="tipoOre == 4" (click)="cambioTipoOre(4)" /></td>
-                                    <td>Altro</td>
-                                    <td><input type="checkbox" [checked]="tipoOre == 5" (click)="cambioTipoOre(5)" /></td>
+                                    <td class="tdDispara">Altro</td>
+                                    <td class="tdDispara"><input type="checkbox" [checked]="tipoOre == 5" (click)="cambioTipoOre(5)" /></td>
                                     <td>Lavoro da casa</td>
                                     <td><input type="checkbox" [checked]="tipoOre == 6" (click)="cambioTipoOre(6)" /></td>
                                 </tr>
@@ -131,28 +153,46 @@
                 </div>
             </div>
 
-            <div style="width: calc(30% - 7px); float: left; height: calc(100% - 6px); border-left: 1px solid #999; padding: 3px;">
-                <!-- TEMPO -->
-                <div class="blocco" style="height: calc(100% - 4px);">
+            <div style="width: calc(30% - 14px);
+                float: left;
+                height: calc(100% - 13px);
+                border-left: 1px solid #999;
+                padding: 3px;
+                margin: 3px;
+                border: 1px solid #999;
+                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
+                box-shadow: 1px 1px 8px 0px #000000;
+                background-color: #fffdd3;
+                border-radius: 3px;">
+                <div style="width: 100%; height: 19px; text-align: center;">
+                    <div  class="sfondoTitolo">
+                        Tempo
+                    </div>
+                </div>
+
+                <!-- DETTAGLIO GIORNATA -->
+                <div class="blocco" style="height: calc(100% - 25px); margin-top: 2px;">
                     <div *ngIf="tipoOre == 1" class="dettaglio">
-                        <div *ngIf="giornoInserito || modalitaInsert" style="width: 30%; float: left;">
+                        <!-- <div style="width: 30%; float: left;">
                             Tempo:
-                        </div>
-                        <div *ngIf="!giornoInserito && !modalitaInsert" style="width: 30%; float: left;">
-                            &nbsp;
-                        </div>
-                        <div style="width: 70%; float: left;">
+                        </div> -->
+                        <div style="width: 100%; float: left;">
                             <div *ngIf="giornoInserito && !modalitaInsert">
                                 {{datiGiornata.Tempo}} <span *ngIf="datiGiornata.Gradi">({{datiGiornata.Gradi}}°)</span>
                             </div>
                             <div *ngIf="modalitaInsert">
-                                <select [(ngModel)]="datiGiornata.Tempo" (click)="clickTempo()">
-                                    <option *ngFor="let tempi of dati.Tempi" 
-                                        [value]="tempi.Tempo" 
-                                        [attr.selected]="tempi.Tempo == datiGiornata.Tempo ? true : null">
-                                        {{tempi.Tempo}}
-                                    </option>
-                                </select>
+                                <div style="width: 30%; float: left;">
+                                    Tempo:
+                                </div>
+                                <div style="width: 70%; float: left;">
+                                    <select [(ngModel)]="datiGiornata.Tempo" (click)="clickTempo()">
+                                        <option *ngFor="let tempi of dati.Tempi" 
+                                            [value]="tempi.Tempo" 
+                                            [attr.selected]="tempi.Tempo == datiGiornata.Tempo ? true : null">
+                                            {{tempi.Tempo}}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div *ngIf="modalitaInsert">
@@ -169,14 +209,27 @@
             <div style="clear: both;"></div>
         </div>
 
-        <div style="width: 100%; height: 25%; float: left; border-top: 1px solid #999; overflow: hidden;">
+        <div style="width: 100%; height: calc(25% - 12px);
+            float: left;
+            
+            background-color: aliceblue;">
             <!-- PRANZO -->
-            <div style="width: calc(50% - 6px); float: left; height: 100%; padding: 3px; overflow: auto;">
-                <div style="width: 100%; height: 23px; float: left; text-align: center; background-color: #e7e5e5;">
+            <div style="width: calc(50% - 14px);
+                float: left;
+                height: calc(100% - 12px);
+                padding: 3px;
+                overflow: hidden;
+                margin: 3px;
+                border: 1px solid #999;
+                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
+                box-shadow: 1px 1px 8px 0px #000000;
+                background-color: #fffdd3;
+                border-radius: 3px;">
+                <div style="width: 100%; height: 23px; float: left; text-align: center;" class="sfondoTitolo">
                     Pranzo
                 </div>
 
-                <div class="blocco" style="margin-top: 25px; height: calc(100% - 35px);">
+                <div *ngIf="tipoOre == 1" class="blocco" style="margin-top: 25px; height: calc(100% - 29px);">
                     <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.Pranzo && datiGiornata.Pranzo.length > 0">
                         <div *ngFor="let pranzo of datiGiornata.Pranzo">
                             <div *ngIf="!modalitaInsert">
@@ -218,8 +271,18 @@
                     </div>
                 </div>
             </div>
-            <div style="width: calc(50% - 7px); float: left; border-left: 1px solid #999; height: calc(100% - 6px); padding: 3px;">
-                <div style="width: 100%; height: 23px; float: left; text-align: center; background-color: #e7e5e5;">
+            <div style="width: calc(50% - 15px);
+                float: left;
+                border-left: 1px solid #999;
+                height: calc(100% - 12px);
+                padding: 3px;
+                border: 1px solid #999;
+                background-color: #fffdd3;
+                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
+                box-shadow: 1px 1px 8px 0px #000000;
+                border-radius: 3px;
+                margin: 3px;">
+                <div style="width: 100%; height: 23px; float: left; text-align: center;" class="sfondoTitolo">
                     Pasticca
                 </div>
                 <div class="blocco" style="margin-top: 25px; height: calc(100% - 29px);">
@@ -246,13 +309,22 @@
             </div>
         </div>
 
-        <div style="width: 100%; height: 25%; float: left; border-top: 1px solid #999; overflow: auto;">
+        <div style="width: 100%; height: 30%; float: left; overflow: hidden; background-color: aliceblue;">
             <!-- MEZZI -->
-            <div style="width: calc(50% - 6px); float: left; height: calc(100% - 6px); padding: 3px;">
-                <div style="width: 100%; height: 23px; float: left; text-align: center; background-color: #e7e5e5;">
+            <div style="width: calc(50% - 14px);
+                float: left;
+                height: calc(100% - 12px);
+                padding: 3px;
+                margin: 3px;
+                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
+                box-shadow: 1px 1px 8px 0px #000000;
+                border: 1px solid #999;
+                background-color: #fffdd3;
+                border-radius: 3px;">
+                <div style="width: 100%; height: 23px; float: left; text-align: center;" class="sfondoTitolo">
                     Mezzi di Andata
                 </div>
-                <div class="blocco" style="margin-top: 25px; height: calc(100% - 29px);">
+                <div *ngIf="tipoOre == 1" class="blocco" style="margin-top: 25px; height: calc(100% - 29px);">
                     <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.MezziAndata && datiGiornata.MezziAndata.length > 0">
                         <div *ngIf="!modalitaInsert">
                             <div *ngFor="let mezzo of datiGiornata.MezziAndata">
@@ -296,12 +368,22 @@
                 </div>
             </div>
 
-            <div style="width: calc(50% - 7px); float: left; border-left: 1px solid #999; height: calc(100% - 6px); padding: 3px;">
-                <div style="width: 100%; height: 23px; float: left; text-align: center; background-color: #e7e5e5;">
+            <div style="width: calc(50% - 14px);
+                float: left;
+                border-left: 1px solid #999;
+                height: calc(100% - 12px);
+                padding: 3px;
+                margin: 3px;
+                border: 1px solid #999;
+                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
+                box-shadow: 1px 1px 8px 0px #000000;
+                background-color: #fffdd3;
+                border-radius: 3px;">
+                <div style="width: 100%; height: 23px; float: left; text-align: center;" class="sfondoTitolo">
                     Mezzi di Ritorno
                 </div>
 
-                <div class="blocco" style="margin-top: 25px; height: calc(100% - 29px);">
+                <div *ngIf="tipoOre == 1" class="blocco" style="margin-top: 25px; height: calc(100% - 29px);">
                     <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.MezziRitorno && datiGiornata.MezziRitorno.length > 0">
                         <div *ngFor="let mezzo of datiGiornata.MezziRitorno">
                             <div *ngIf="!modalitaInsert">
@@ -346,16 +428,27 @@
             </div>
         </div>
 
-        <div style="width: calc(100% - 6px); height: calc(20% - 30px); float: left; border-top: 1px solid #999; overflow: auto; padding: 3px;">
-            <!-- NOTE -->
-            <div style="width: 100%; height: 23px; float: left; text-align: center; background-color: #e7e5e5;">
-                Note
-            </div>
-            <div class="blocco" style="margin-top: 10px; height: calc(100% - 29px);">
-                <div *ngIf="!modalitaInsert" style="white-space: break-spaces; width: 100%; height: 100%;" [innerHTML]="datiGiornata.Notelle">
+        <div style="width: 100%; height: 17%; float: left; overflow: hidden; background-color: aliceblue;">
+            <div style="width: calc(100% - 13px);
+                float: left;
+                height: calc(100% - 12px);
+                padding: 3px;
+                margin: 3px;
+                border: 1px solid #999;
+                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
+                box-shadow: 1px 1px 8px 0px #000000;
+                background-color: #fffdd3;
+                border-radius: 3px;">
+                <!-- NOTE -->
+                <div style="width: 100%; height: 23px; text-align: center;" class="sfondoTitolo">
+                    Note
                 </div>
-                <div *ngIf="modalitaInsert" style="width: calc(100% - 7px); height: 100%;">
-                    <textarea [(ngModel)]="datiGiornata.Notelle" style="width: 100%; height: calc(100% - 10px); margin-top: 3px;"></textarea>
+                <div class="blocco" style="margin-top: 2px; height: calc(100% - 30px);">
+                    <div *ngIf="!modalitaInsert" style="white-space: break-spaces; width: 100%; height: 100%;" [innerHTML]="datiGiornata.Notelle">
+                    </div>
+                    <div *ngIf="modalitaInsert" style="width: calc(100% - 7px); height: 100%;">
+                        <textarea [(ngModel)]="datiGiornata.Notelle" style="width: 100%; height: calc(100% - 10px); margin-top: 3px;"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
@@ -363,20 +456,45 @@
 
     <div class="footer">
         <!-- FOOTER -->
-        <div style="width: 100%; height: calc(100% - 35px); float: left;">
-            &nbsp;
+        <div style="width: 100%; height: calc(100% - 55px); float: left;">
+            <div class="blocco" style="background-color: transparent;">
+                <table style="width: 100%; height: 100%;">
+                    <tr style="height: 30px;">
+                        <td style="text-align: center">
+                            <span *ngIf="datiGiornata">
+                                S. {{datiGiornata.Santo}}
+                            </span>
+                            <span *ngIf="!datiGiornata">
+                                &nbsp;
+                            </span>
+                        </td>
+                        <td style="text-align: center">
+                            Giorno dell'anno {{giornoDellAnno}}
+                        </td>
+                        <td style="text-align: center">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="blocco" style="font-size: 10px; text-align: left; background-color: #b0ced5; border: 1px solid #999; border-radius: 3px;" 
+                                [innerHTML]="ricorrenze">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <div style="width: 100%; height: 30px; float: left; border-top: 1px solid #999;">
-            <div style="width: 30px; float: left;">
-                <img src="assets/immagini/icona_INDIETRO.png" class="immagine" (click)="indietroGiorno()" />
+        <div style="width: 100%; height: 50px; float: left; padding-top: 3px;">
+            <div style="width: 60px; float: left;">
+                <img src="assets/immagini/icona_INDIETRO.png" class="immagineIcona" (click)="indietroGiorno()" />
             </div>
-            <div style="width: calc(100% - 60px); float: left;">
-                <img *ngIf="!modalitaInsert" src="assets/immagini/icona_MODIFICA-TAG.png" class="immagine" (click)="apreModifica()" />
-                <img *ngIf="modalitaInsert" src="assets/immagini/icona_SALVA.png" class="immagine" (click)="salvaGiornata()" />
-                <img *ngIf="modalitaInsert" src="assets/immagini/elimina_quadrato.png" class="immagine" (click)="annullaModifica()" />
+            <div style="width: calc(100% - 120px); float: left;">
+                <img *ngIf="!modalitaInsert" src="assets/immagini/icona_MODIFICA-TAG.png" class="immagineIcona" (click)="apreModifica()" />
+                <img *ngIf="modalitaInsert" src="assets/immagini/icona_SALVA.png" class="immagineIcona" (click)="salvaGiornata()" />
+                <img *ngIf="modalitaInsert" src="assets/immagini/elimina_quadrato.png" class="immagineIcona" (click)="annullaModifica()" />
             </div>
-            <div style="width: 30px; float: left;">
-                <img src="assets/immagini/icona_AVANTI.png" class="immagine" (click)="avantiGiorno()" />
+            <div style="width: 60px; float: left;">
+                <img src="assets/immagini/icona_AVANTI.png" class="immagineIcona" (click)="avantiGiorno()" />
             </div>
         </div>
     </div>
@@ -388,9 +506,9 @@
     [datiGiornata]="datiGiornata"
 
     (visibile)="modificaGiorno = !modificaGiorno"
-></modificagiorno-component> -->
+></modificagiorno-component>
 
-<div *ngIf="mostraCalendario" class="calendario">
+<div class="calendario">
     <div style="float: left; width: 220px; margin-top: 2px; height: auto;">
         <app-calendario
             [Utils]="Utils"
@@ -403,10 +521,10 @@
         >
         </app-calendario>
     </div>
-    <div style="float: left; width: 25px; height: 25px;">
+    <!- - <div style="float: left; width: 25px; height: 25px;">
         <img src="assets/immagini/elimina_quadrato.png" class="immagineTabella"  (click)="mostraCalendario = false" />
-    </div>
-</div>
+    </div> - ->
+</div> -->
 
 <div *ngIf="VariabiliGlobali.CaricamentoInCorso" class="attenderePrego">
     <img src="assets/immagini/Processing.gif" class="immagineWait" />

@@ -111,5 +111,30 @@ export class ApiService {
       'idLavoro=' + idLavoro;
 
     return this.effettuaChiamata(url);
+  }
+  
+  salvaGiornata(parametri) {
+    this.variabiliGlobali.CaricamentoInCorso = true;
+
+    const url = this.variabiliGlobali.urlWS + 'Orari.asmx/ScriveOrario?' +
+      'idUtente=' + this.variabiliGlobali.idUtente + '&' +
+      'Giorno=' + parametri.giorno + '&' +
+      'Mese=' + parametri.mese + '&' + 
+      'Anno=' + parametri.anno + '&' +
+      'QuanteOre=' + parametri.QuanteOre + '&' +
+      'Note=' + parametri.Note + '&' +
+      'Misti=' + parametri.Misti + '&' +
+      'CodCommessa=' + parametri.CodCommessa + '&' +
+      'Entrata=' + parametri.Entrata + '&' +
+      'idLavoro=' + parametri.idLavoro + '&' +
+      'idIndirizzo=' + parametri.idIndirizzo + '&' +
+      'Km=' + parametri.Km + '&' +
+      'Pranzo=' + parametri.Pranzo + '&' +
+      'Pasticca=' + parametri.Pasticca + '&' +
+      'MezziAndata=' + parametri.MezziAndata + '&' +
+      'MezziRitorno=' + parametri.MezziRitorno + '&' +
+      'Tempo=' + parametri.Tempo
+
+    return this.effettuaChiamata(url);
   }  
 }

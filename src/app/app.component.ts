@@ -313,7 +313,94 @@ export class AppComponent implements OnInit {
   }
 
   salvaGiornata() {
-    // console.log(this.datiGiornata.Notelle);
+    const giorno = this.dataAttuale.getDate();
+    const mese = this.dataAttuale.getMonth() + 1;
+    const anno = this.dataAttuale.getFullYear();
+
+    let pranzo = '';
+    if (this.tipoOre !== 1) {
+      this.datiGiornata.Pranzo.forEach(element => {
+        pranzo += element.idPortata + ';';
+      });
+    }
+
+    let pasticca = '';
+    if (this.tipoOre !== 1) {
+      this.dati.Pasticche.forEach(element => {
+        if (element.Pasticca === this.datiGiornata.Pasticca) {
+          pasticca = element.idPasticca;
+        }
+      });
+    }
+
+    let MezziAndata = '';
+    if (this.tipoOre !== 1) {
+      this.datiGiornata.MezziAndata.forEach(element => {
+        const mezzo = element.Mezzo + ' ' + element.Dettaglio;
+        this.dati.Mezzi.forEach(element2 => {
+          const mezzo2 = element2.Mezzo + ' ' + element2.Dettaglio;
+          if (mezzo === mezzo2) {
+            MezziAndata += element2.idMezzo + ';';
+          }
+        });
+      });
+    }
+
+    let MezziRitorno = '';
+    if (this.tipoOre !== 1) {
+      this.datiGiornata.MezziRitorno.forEach(element => {
+        const mezzo = element.Mezzo + ' ' + element.Dettaglio;
+        this.dati.Mezzi.forEach(element2 => {
+          const mezzo2 = element2.Mezzo + ' ' + element2.Dettaglio;
+          if (mezzo === mezzo2) {
+            MezziRitorno += element2.idMezzo + ';';
+          }
+        });
+      });
+    }
+
+    let tempo = '';
+    if (this.tipoOre !== 1) {
+      this.dati.Tempi.forEach(element => {
+        if (element.Tempo === this.datiGiornata.Tempo) {
+          tempo = element.idTempo + ';' + this.datiGiornata.Gradi;
+        }
+      });
+      if (tempo === '') {
+        tempo = '0;' + this.datiGiornata.Gradi;
+      }
+    }
+
+    let misti = '';
+    let Ore = this.datiGiornata.Quante;
+    let entrata = this.datiGiornata.Entrata;
+    if (this.tipoOre !== 1) {
+      // Gestire il tipo di lavoro diverso
+      entrata = '';
+      misti = ''; // GESTIRE
+    }
+
+    const record = {
+      Giorno: giorno,
+      Mese: mese, 
+      Anno: anno,
+      QuanteOre: Ore,
+      Note: this.datiGiornata.Notelle,
+      Misti: misti,
+      CodCommessa:  this.datiGiornata.CodCommessa,
+      Entrata: entrata,
+      idLavoro: this.datiGiornata.idLavoro,
+      idIndirizzo: this.datiGiornata.idIndirizzo,
+      Km: this.datiGiornata.Km,
+      Pranzo: pranzo,
+      Pasticca: pasticca,
+      MezziAndata: MezziAndata,
+      MezziRitorno: MezziRitorno,
+      Tempo: tempo
+    }
+
+    console.log('Dati giornata da salvare: ', record);
+
     this.giornoInserito = true;
 
     this.modalitaInsert = false;
@@ -431,6 +518,7 @@ export class AppComponent implements OnInit {
     console.log('Data impostata', e);
     this.mostraCalendario = false;
     this.dataAttuale = new Date(e);
+
     this.disegnaGiorno();
   }
 }
