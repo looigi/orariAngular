@@ -30,6 +30,17 @@ export class AppComponent implements OnInit {
   ricorrenze = '';
   giornoInserito = false;
   mostraCalendario = false;
+  immagineTempo = ''; // 'assets/immagini/Tempo/1.png';
+  immagineLavoro = '';
+  immagineSanto = '';
+  oreLavorateMiste = 8;
+  orePermessiMiste = 0;
+  oreSolidarietaMiste = 0;
+  oreMalattiaMiste = 0;
+  appoggioTipoOre;
+  appoggioOreLavorate;
+  descSanto;
+  visuaDescSanto = false;
 
   Utils = {
     linkIcone: 'assets'
@@ -51,6 +62,10 @@ export class AppComponent implements OnInit {
       this.dataAttuale = new Date();
     }
 
+    const giorno = this.dataAttuale.getDate();
+    const mese = this.dataAttuale.getMonth() + 1;
+    this.immagineSanto = 'assets/immagini/Onomastici/Imm_' + giorno + '_' + mese + '.png';
+
     // console.log('Data attuale', this.dataAttuale);
 
     const url: string = '/assets/connessione.json';
@@ -64,9 +79,29 @@ export class AppComponent implements OnInit {
 
       this.caricaDatiGiornata();
       this.disegnaGiorno();
+
+      this.aspettaDati();
     });
   }
   
+  aspettaDati() {
+    const t = setInterval(() => {
+      if (this.dati && this.datiGiornata) {
+        this.immagineTempo = '';
+        this.dati.Tempi.forEach(element => {
+          if (element.Tempo === this.datiGiornata.Tempo) {
+            this.immagineTempo = 'assets/immagini/Tempo/' + element.idTempo + '.png';
+          }
+        });
+
+        this.immagineLavoro = '';
+        if (this.tipoOre > -1) {
+          this.immagineLavoro = 'assets/immagini/Lavori/' + this.tipoOre + '.jpg';
+        }
+      }
+    }, 500);
+  }
+
   caricaDatiGiornata() {
     this.apiService.ritornaDatiPerGiornata()
     .map((response: any) => response)
@@ -145,35 +180,22 @@ export class AppComponent implements OnInit {
               this.prendeRicorrenze();
               if (!this.giornoInserito) {
               } else {
-                switch (ore) {
-                  case -1:
-                    this.tipoOre = -1;
-                    this.oreLavorate = 'BOH!';
-                    break;
-                  case -2:
-                    this.tipoOre = 2;
-                    this.oreLavorate = 'Ferie';
-                    break;
-                  case -3:
-                    this.tipoOre = 3;
-                    this.oreLavorate = 'Permesso';
-                    break;
-                  case -4:
-                    this.tipoOre = 4;
-                    this.oreLavorate = 'Malattia';
-                    break;
-                  case -5:
-                    this.tipoOre = 5;
-                    this.oreLavorate = 'Altro';
-                    break;
-                  case -6:
-                    this.tipoOre = 6;
-                    this.oreLavorate = 'Giorno lavorato a casa';
-                    break;
-                  default:
-                    this.tipoOre = 1;
-                    this.oreLavorate = ore;  
+                if (ore === -5) {
+                  const q = this.datiGiornata.Misti;
+                  if (q && q.indexOf(';S') > -1) {
+                    const qq = q.split(';');
+                    this.oreLavorateMiste = qq[0].replace('N', '');
+                    this.orePermessiMiste = qq[1].replace('P', '');
+                    this.oreMalattiaMiste = qq[2].replace('M', '');
+                    this.oreSolidarietaMiste = qq[4].replace('S', '');
+                  } else {
+                    this.oreLavorateMiste = this.datiGiornata.OreStandard;
+                    this.orePermessiMiste = 0;
+                    this.oreSolidarietaMiste = 0;
+                    this.oreMalattiaMiste = 0;        
+                  }
                 }
+                this.impostaTipoOre(ore);
               }
 
               this.caricaCommesse(false);
@@ -187,6 +209,31 @@ export class AppComponent implements OnInit {
       }
     );
   }
+
+  caricaDescSanto() {
+    const giorno = this.dataAttuale.getDate();
+    const mese = this.dataAttuale.getMonth() + 1;
+
+    this.apiService.ritornaDescSanto(giorno, mese)
+    .map((response: any) => response)
+    .subscribe((data2: string | string[]) => {
+        if (data2) {
+          const data = this.apiService.SistemaStringaRitornata(data2);
+          if (data.indexOf('ERROR') === -1) {
+            if (data) {
+              this.descSanto = this.datiGiornata.Santo + '<hr />' + data;
+
+              this.visuaDescSanto = true;
+            } else {
+              // alert('Nessun valore di ritorno per il salvataggio');
+              console.log('Nessun valore santo');
+            }
+          } else {
+            alert(data)
+          }
+        }
+      }
+    );  }
 
   prendeRicorrenze() {
     const rico = this.datiGiornata.Ricorrenze;
@@ -210,6 +257,14 @@ export class AppComponent implements OnInit {
   }
 
   pulisceArray() {
+    if (this.datiGiornata) {
+      this.oreLavorateMiste = this.datiGiornata.OreStandard;
+    } else {
+      this.oreLavorateMiste = 8;
+    }
+    this.orePermessiMiste = 0;
+    this.oreSolidarietaMiste = 0;
+    this.oreMalattiaMiste = 0;        
     this.giornoInserito = false;
     this.datiGiornata = {
       CodCommessa: -1,
@@ -245,13 +300,71 @@ export class AppComponent implements OnInit {
   }
 
   disegnaGiorno() {
+    const giorno = this.dataAttuale.getDate();
+    const mese = this.dataAttuale.getMonth() + 1;
+    this.immagineSanto = 'assets/immagini/Onomastici/Imm_' + giorno + '_' + mese + '.png';
+
     this.leggeGiornataAttuale();
     this.giornoDellAnno = this.VariabiliGlobali.calcolaGiornoAnno(this.dataAttuale);
   }
 
   cambioTipoOre(ore) {
-    console.log('Tipo ore', ore);
-    this.tipoOre = ore;
+    if (ore === 1 || ore === -5) {
+      if (!this.datiGiornata.Entrata) {
+        this.datiGiornata.Entrata = '08:00:00';
+      }
+      if (ore == -5) {
+        if (!this.oreLavorateMiste) {
+          if (this.datiGiornata) {
+            this.oreLavorateMiste = this.datiGiornata.OreStandard;
+          } else {
+            this.oreLavorateMiste = 8;
+          }
+          this.orePermessiMiste = 0;
+          this.oreSolidarietaMiste = 0;
+          this.oreMalattiaMiste = 0;
+        }
+      }
+    }
+    // this.tipoOre = ore;
+    this.impostaTipoOre(ore);
+
+    console.log('Tipo ore', ore, this.tipoOre);
+
+    this.aspettaDati();
+  }
+
+  impostaTipoOre(ore) {
+    switch (ore) {
+      case -1:
+        this.tipoOre = -1;
+        this.oreLavorate = 'BOH!';
+        break;
+      case -2:
+        this.tipoOre = 2;
+        this.oreLavorate = 'Ferie';
+        break;
+      case -3:
+        this.tipoOre = 3;
+        this.oreLavorate = 'Permesso';
+        break;
+      case -4:
+        this.tipoOre = 4;
+        this.oreLavorate = 'Malattia';
+        break;
+      case -5:
+        this.tipoOre = 5;
+        this.oreLavorate = 'Altro';
+        break;
+      case -6:
+        this.tipoOre = 6;
+        this.oreLavorate = 'Giorno lavorato a casa';
+        break;
+      default:
+        this.tipoOre = 1;
+        this.oreLavorate = ore;  
+    }
+    this.datiGiornata.Quante = ore;
   }
 
   apreModifica() {
@@ -308,6 +421,8 @@ export class AppComponent implements OnInit {
     });
     this.datiGiornata.MezziRitorno = JSON.parse(JSON.stringify(mr));
     this.datiGiornata.Portate = new Array();
+    this.appoggioTipoOre = this.tipoOre;
+    this.appoggioOreLavorate = this.oreLavorate;
 
     this.modalitaInsert = true;
   }
@@ -318,14 +433,14 @@ export class AppComponent implements OnInit {
     const anno = this.dataAttuale.getFullYear();
 
     let pranzo = '';
-    if (this.tipoOre !== 1) {
+    if (this.tipoOre === 1 || this.tipoOre === 5) {
       this.datiGiornata.Pranzo.forEach(element => {
         pranzo += element.idPortata + ';';
       });
     }
 
     let pasticca = '';
-    if (this.tipoOre !== 1) {
+    if (this.tipoOre === 1 || this.tipoOre === 5) {
       this.dati.Pasticche.forEach(element => {
         if (element.Pasticca === this.datiGiornata.Pasticca) {
           pasticca = element.idPasticca;
@@ -334,7 +449,7 @@ export class AppComponent implements OnInit {
     }
 
     let MezziAndata = '';
-    if (this.tipoOre !== 1) {
+    if (this.tipoOre === 1 || this.tipoOre === 5) {
       this.datiGiornata.MezziAndata.forEach(element => {
         const mezzo = element.Mezzo + ' ' + element.Dettaglio;
         this.dati.Mezzi.forEach(element2 => {
@@ -347,7 +462,7 @@ export class AppComponent implements OnInit {
     }
 
     let MezziRitorno = '';
-    if (this.tipoOre !== 1) {
+    if (this.tipoOre === 1 || this.tipoOre === 5) {
       this.datiGiornata.MezziRitorno.forEach(element => {
         const mezzo = element.Mezzo + ' ' + element.Dettaglio;
         this.dati.Mezzi.forEach(element2 => {
@@ -360,7 +475,7 @@ export class AppComponent implements OnInit {
     }
 
     let tempo = '';
-    if (this.tipoOre !== 1) {
+    if (this.tipoOre === 1 || this.tipoOre === 5) {
       this.dati.Tempi.forEach(element => {
         if (element.Tempo === this.datiGiornata.Tempo) {
           tempo = element.idTempo + ';' + this.datiGiornata.Gradi;
@@ -369,15 +484,15 @@ export class AppComponent implements OnInit {
       if (tempo === '') {
         tempo = '0;' + this.datiGiornata.Gradi;
       }
+    } else {
+      tempo = '-1;999';
     }
 
     let misti = '';
     let Ore = this.datiGiornata.Quante;
     let entrata = this.datiGiornata.Entrata;
-    if (this.tipoOre !== 1) {
-      // Gestire il tipo di lavoro diverso
-      entrata = '';
-      misti = ''; // GESTIRE
+    if (this.tipoOre === 5) {
+      misti = 'N' + this.oreLavorateMiste + ';P' + this.orePermessiMiste + ';M' + this.oreMalattiaMiste + ';R0;S' + this.oreSolidarietaMiste;
     }
 
     const record = {
@@ -401,9 +516,26 @@ export class AppComponent implements OnInit {
 
     console.log('Dati giornata da salvare: ', record);
 
-    this.giornoInserito = true;
+    this.apiService.salvaGiornata(record)
+    .map((response: any) => response)
+    .subscribe((data2: string | string[]) => {
+        if (data2) {
+          const data = this.apiService.SistemaStringaRitornata(data2);
+          if (data.indexOf('ERROR') === -1) {
+            if (data) {
+              this.giornoInserito = true;
 
-    this.modalitaInsert = false;
+              this.modalitaInsert = false;
+            } else {
+              alert('Nessun valore di ritorno per il salvataggio');
+            }
+          } else {
+            alert(data)
+          }
+        }
+      }
+    );
+
   }
 
   annullaModifica() {
@@ -415,6 +547,8 @@ export class AppComponent implements OnInit {
       this.datiGiornata.MezziAndata = new Array();
       this.datiGiornata.MezziRitorno = new Array(); */
     }
+    this.tipoOre = this.appoggioTipoOre;
+    this.oreLavorate = this.appoggioOreLavorate;
     this.datiGiornata = JSON.parse(JSON.stringify(this.appoggioDatiGiornata));
     this.modalitaInsert = false;
   }
@@ -520,5 +654,13 @@ export class AppComponent implements OnInit {
     this.dataAttuale = new Date(e);
 
     this.disegnaGiorno();
+  }
+
+  apreImpostazioni() {
+
+  }
+
+  apreDescSanto() {
+    this.caricaDescSanto();
   }
 }

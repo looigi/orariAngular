@@ -113,14 +113,24 @@ export class ApiService {
     return this.effettuaChiamata(url);
   }
   
+  ritornaDescSanto(Giorno, Mese) {
+    this.variabiliGlobali.CaricamentoInCorso = true;
+
+    const url = this.variabiliGlobali.urlWS + 'Orari.asmx/RitornaDescSanto?' +
+      'Giorno=' + Giorno + '&' +
+      'Mese=' + Mese;
+
+    return this.effettuaChiamata(url);
+  }
+
   salvaGiornata(parametri) {
     this.variabiliGlobali.CaricamentoInCorso = true;
 
     const url = this.variabiliGlobali.urlWS + 'Orari.asmx/ScriveOrario?' +
       'idUtente=' + this.variabiliGlobali.idUtente + '&' +
-      'Giorno=' + parametri.giorno + '&' +
-      'Mese=' + parametri.mese + '&' + 
-      'Anno=' + parametri.anno + '&' +
+      'Giorno=' + parametri.Giorno + '&' +
+      'Mese=' + parametri.Mese + '&' + 
+      'Anno=' + parametri.Anno + '&' +
       'QuanteOre=' + parametri.QuanteOre + '&' +
       'Note=' + parametri.Note + '&' +
       'Misti=' + parametri.Misti + '&' +
