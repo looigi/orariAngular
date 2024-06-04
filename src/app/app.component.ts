@@ -239,10 +239,14 @@ export class AppComponent implements OnInit {
             if (data) {
               // console.log(data);
               this.datiGiornata = JSON.parse(data);
-              console.log(this.datiGiornata);
               this.giornoInserito = this.datiGiornata.GiornoInserito;
               const ore = this.datiGiornata.Quante;
               this.oreLavorate = '';
+              if (this.datiGiornata.Pasticca[0] && this.datiGiornata.Pasticca[0].idPasticca) {
+                this.datiGiornata.Pasticca = this.datiGiornata.Pasticca[0].Pasticca;
+              }
+              this.prendeIconeMezzi(1);
+              this.prendeIconeMezzi(2);
               this.prendeRicorrenze();
               if (!this.giornoInserito) {
               } else {
@@ -264,6 +268,8 @@ export class AppComponent implements OnInit {
                 this.impostaTipoOre(ore);
               }
 
+              console.log(this.datiGiornata);
+
               this.caricaCommesse(false);
             } else {
               this.pulisceArray();
@@ -274,6 +280,51 @@ export class AppComponent implements OnInit {
         }
       }
     );
+  }
+
+  prendeIconeMezzi(q) {
+    let m;
+    if (q === 1) {
+      m =JSON.parse(JSON.stringify(this.datiGiornata.MezziAndata));
+    } else {
+      m =JSON.parse(JSON.stringify(this.datiGiornata.MezziRitorno));
+    }
+    if (m) {
+      m.forEach(element => {
+        if (element.Mezzo.toUpperCase().trim().indexOf('TRENO') > -1) {
+          element['Icona'] = 'Treno';
+        } else {
+          if (element.Mezzo.toUpperCase().trim().indexOf('AUTOBUS') > -1) {
+            element['Icona'] = 'Autobus';
+          } else {
+            if (element.Mezzo.toUpperCase().trim().indexOf('MACCHINA') > -1) {
+              element['Icona'] = 'Macchina';
+            } else {
+              if (element.Mezzo.toUpperCase().trim().indexOf('METRO') > -1) {
+                element['Icona'] = 'Metro';
+              } else {
+                if (element.Mezzo.toUpperCase().trim().indexOf('TRAM') > -1) {
+                  element['Icona'] = 'Tram';
+                } else {
+                  if (element.Mezzo.toUpperCase().trim().indexOf('PIEDI') > -1 || element.Dettaglio.toUpperCase().trim().indexOf('PIEDI') > -1) {
+                    element['Icona'] = 'APie';
+                  } else {
+                    element['Icona'] = 'Niente';
+                  }
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    if (q === 1) {
+      this.datiGiornata.MezziAndata = JSON.parse(JSON.stringify(m));
+      // console.log(this.datiGiornata.MezziAndata);
+    } else {
+      this.datiGiornata.MezziRitorno =JSON.parse(JSON.stringify(m));
+      // console.log(this.datiGiornata.MezziRitorno);
+    }
   }
 
   caricaDescSanto() {
@@ -287,7 +338,7 @@ export class AppComponent implements OnInit {
           const data = this.apiService.SistemaStringaRitornata(data2);
           if (data.indexOf('ERROR') === -1) {
             if (data) {
-              this.descSanto = this.datiGiornata.Santo + '<hr />' + data;
+              this.descSanto = data;
 
               this.visuaDescSanto = true;
             } else {
@@ -483,7 +534,7 @@ export class AppComponent implements OnInit {
       this.datiGiornata.MezziAndata = JSON.parse(JSON.stringify(ma));
     }
 
-    if (this.datiGiornata.giornoInserito)  {
+    if (this.datiGiornata.giornoInserito) {
       const mezziRitorno = this.datiGiornata.MezziStandardRitorno;
       const mr = new Array();
       mezziRitorno.forEach(element => {
@@ -500,9 +551,13 @@ export class AppComponent implements OnInit {
       });
       this.datiGiornata.MezziRitorno = JSON.parse(JSON.stringify(mr));
     }
+    this.prendeIconeMezzi(1);
+    this.prendeIconeMezzi(2);
     this.datiGiornata.Portate = new Array();
     this.appoggioTipoOre = this.tipoOre;
     this.appoggioOreLavorate = this.oreLavorate;
+
+    console.log('Dati da modificare', this.datiGiornata);
 
     this.modalitaInsert = true;
   }
@@ -786,14 +841,19 @@ export class AppComponent implements OnInit {
     if (this.mezzoAndataScelto) {
       // console.log('Mezzo di ritorno da aggiungere: ', this.mezzoRitornoScelto);
       this.dati.Mezzi.forEach(element => {
-        const mezzo = (element.Mezzo + ' ' + element.Dettaglio).toUpperCase().trim();
-        console.log(mezzo, this.mezzoAndataScelto.toUpperCase().trim());
-        if (mezzo === this.mezzoAndataScelto.toUpperCase().trim()) {
-          // console.log('Mezzo di ritorno trovato', element);
-          this.datiGiornata.MezziAndata.push(element);
-          setTimeout(() => {
-            this.mezzoAndataScelto = '';
-          }, 500);
+        const mezzo = element.Mezzo.toUpperCase().trim()
+        const dettaglio = element.Dettaglio.toUpperCase().trim();
+        if (mezzo) {
+          // console.log('*' + mezzo + '*', '>' + this.mezzoRitornoScelto.toUpperCase().trim() + '<');
+          if (this.mezzoAndataScelto.toUpperCase().trim().indexOf(mezzo) > -1 &&
+            this.mezzoAndataScelto.toUpperCase().trim().indexOf(dettaglio) > -1) {
+            // console.log('Mezzo di ritorno trovato', element);
+            this.datiGiornata.MezziAndata.push(element);
+            this.prendeIconeMezzi(1);
+            setTimeout(() => {
+              this.mezzoAndataScelto = '';
+            }, 500);
+          }
         }
       });
     }
@@ -803,14 +863,19 @@ export class AppComponent implements OnInit {
     if (this.mezzoRitornoScelto) {
       // console.log('Mezzo di ritorno da aggiungere: ', this.mezzoRitornoScelto);
       this.dati.Mezzi.forEach(element => {
-        const mezzo = (element.Mezzo + ' ' + element.Dettaglio).toUpperCase().trim();
-        console.log(mezzo, this.mezzoRitornoScelto.toUpperCase().trim());
-        if (mezzo === this.mezzoRitornoScelto.toUpperCase().trim()) {
-          // console.log('Mezzo di ritorno trovato', element);
-          this.datiGiornata.MezziRitorno.push(element);
-          setTimeout(() => {
-            this.mezzoRitornoScelto = '';
-          }, 500);
+        const mezzo = element.Mezzo.toUpperCase().trim()
+        const dettaglio = element.Dettaglio.toUpperCase().trim();
+        if (mezzo) {
+          console.log('*' + mezzo + '*', '>' + this.mezzoRitornoScelto.toUpperCase().trim() + '<');
+          if (this.mezzoRitornoScelto.toUpperCase().trim().indexOf(mezzo) > -1 &&
+            this.mezzoRitornoScelto.toUpperCase().trim().indexOf(dettaglio) > -1) {
+            console.log('Mezzo di ritorno trovato', element);
+            this.datiGiornata.MezziRitorno.push(element);
+            this.prendeIconeMezzi(2);
+            setTimeout(() => {
+              this.mezzoRitornoScelto = '';
+            }, 500);
+          }
         }
       });
     }

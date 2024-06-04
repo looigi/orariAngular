@@ -1,13 +1,15 @@
 <div class="contenitore">
     <div *ngIf="datiGiornata" class="header">
         <!-- HEADER -->
-        <div class="blocco" style="overflow: hidden; border: 1px solid #999; border-radius: 3px; height: calc(100% - 6px); 
-            background-color: #f3fff5;">
+        <div class="blocco" style="overflow: hidden;
+            height: calc(100% - 6px);
+            background-color: transparent;"
+        >
             <div style="float: left; height: calc(100% - 3px); text-align: left; overflow: hidden;"
                 [style.width]="schermoPiccolo ? 'calc(100% - 30px)' : 'calc(100% - 260px)'"
             >
                 <span class="titolone" (click)="mostraCalendario = true"
-                    [style.font-size]="schermoPiccolo ? '8vw' : '4vw'"
+                    [style.font-size]="schermoPiccolo ? '4vh' : '5.5vh'"
                 >
                     {{numeroGiornoAttuale}} {{nomeGiornoAttuale}}
                 </span>
@@ -32,7 +34,7 @@
                 <img src="assets/immagini/icona-OPZIONI.png" class="immagine" (click)="apriSettings()" />
             </div>
     
-            <div *ngIf="!schermoPiccolo" style="float: left; height: calc(100% - 6px); width: 260px;">
+            <div *ngIf="!schermoPiccolo" style="float: left; height: calc(100% - 6px); width: 260px; text-align: left;">
                 <!-- <div class="blocco">
                     <span class="titoloSanto">
                         S. {{datiGiornata.Santo}}<br />
@@ -52,17 +54,8 @@
     </div>
 
     <div *ngIf="datiGiornata" class="corpo">
-        <div style="width: 100%; height: calc(30% - 6px); float: left; background-color: aliceblue;">
-            <div style="width: calc(30% - 23px);
-                float: left;
-                height: calc(100% - 13px);
-                padding: 3px;
-                margin: 3px;
-                border: 1px solid #999;
-                background-color: #e8ffeb;
-                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
-                box-shadow: 1px 1px 8px 0px #000000;
-                border-radius: 3px;"
+        <!-- <div style="width: 100%; height: calc(30% - 6px); float: left; background-color: aliceblue;"> -->
+            <div class="finestrella" style="width: calc(30% - 23px);"
             >
                 <div style="width: 100%; height: 19px; text-align: center;">
                     <div  class="sfondoTitolo">
@@ -77,37 +70,45 @@
                     [style.background-image]="immagineLavoro ? 'url(' + immagineLavoro + ')' : ''"
                 >
                     <div class="riga">
-                        <div *ngIf="!modalitaInsert && tipoOre != 1 && tipoOre != 5" class="riga">
+                        <!-- [style.padding-top]="schermoPiccolo ? '14px' : '36px'" -->
+                        <div *ngIf="!modalitaInsert && tipoOre != 1 && tipoOre != 5" class="riga rigaTabella" style="text-align: center;
+                            font-size: 30px;
+                            color: blue;
+                            white-space: nowrap;
+                            padding-top: 35px;"
+                        >
                             {{oreLavorate}}
                         </div>
     
-                        <div *ngIf="!modalitaInsert && tipoOre == 1" class="riga">
-                            {{titoloTipoGiornata[0]}}
+                        <div *ngIf="!modalitaInsert && tipoOre == 1" class="riga" >
+                            <span class="rigaTabella">
+                                {{titoloTipoGiornata[0]}}
+                            </span>
                         </div>
 
                         <div *ngIf="modalitaInsert" style="opacity: .75;">
                             <table style="width: 100%;" cellapdding="0" cellspacing = "0">
-                                <tr>
+                                <tr class="rigaTabella">
                                     <td class="tdDispara" style="width: 20%;">{{titoloTipoGiornata[0]}}</td>
                                     <td class="tdDispara" style="width: 80%; text-align: left;"><input type="checkbox" [checked]="tipoOre == 1" (click)="cambioTipoOre(1)" /></td>
                                 </tr>
-                                <tr>
+                                <tr class="rigaTabella">
                                     <td class="tdPara" style="width: 20%;">{{titoloTipoGiornata[1]}}</td>
                                     <td class="tdPara" style="width: 80%; text-align: left;"><input type="checkbox" [checked]="tipoOre == 2" (click)="cambioTipoOre(-2)" /></td>
                                 </tr>
-                                <tr>
+                                <tr class="rigaTabella">
                                     <td class="tdDispara" style="width: 20%;">{{titoloTipoGiornata[2]}}</td>
                                     <td class="tdDispara" style="width: 80%; text-align: left;"><input type="checkbox" [checked]="tipoOre == 3" (click)="cambioTipoOre(-3)" /></td>
                                 </tr>
-                                <tr>
+                                <tr class="rigaTabella">
                                     <td class="tdPara" style="width: 20%;">{{titoloTipoGiornata[3]}}</td>
                                     <td class="tdPara" style="width: 80%; text-align: left;"><input type="checkbox" [checked]="tipoOre == 4" (click)="cambioTipoOre(-4)" /></td>
                                 </tr>
-                                <tr>
+                                <tr class="rigaTabella">
                                     <td class="tdDispara" style="width: 20%;">{{titoloTipoGiornata[4]}}</td>
                                     <td class="tdDispara" style="width: 80%; text-align: left;"><input type="checkbox" [checked]="tipoOre == 5" (click)="cambioTipoOre(-5)" /></td>
                                 </tr>
-                                <tr>
+                                <tr class="rigaTabella">
                                     <td class="tdPara" style="width: 20%;">{{titoloTipoGiornata[5]}}</td>
                                     <td class="tdPara" style="width: 80%; text-align: left;"><input type="checkbox" [checked]="tipoOre == 6" (click)="cambioTipoOre(-6)" /></td>
                                 </tr>
@@ -117,17 +118,7 @@
                 </div>             
             </div>
 
-            <div style="width: calc(40% - 7px);
-                float: left;
-                height: calc(100% - 13px);
-                padding: 3px;
-                margin: 3px;
-                border: 1px solid #999;
-                background-color: #e8ffeb;
-                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
-                box-shadow: 1px 1px 8px 0px #000000;
-                border-radius: 3px;"
-            >
+            <div class="finestrella" style="width: calc(40% - 7px);">
                 <div style="width: 100%; height: 19px; text-align: center;">
                     <div  class="sfondoTitolo">
                         Dettaglio Giornata
@@ -143,10 +134,10 @@
                 >
                     <div *ngIf="tipoOre == 5" class="riga">
                         <!-- N0;P8;M0;R0;S0 -->
-                        <div style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
+                        <div class="rigaTabella" style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
                             {{titoloDettaglio[0]}}
                         </div>
-                        <div style="width: 70%; float: left;">
+                        <div class="rigaTabella" style="width: 70%; float: left;">
                             <div *ngIf="!modalitaInsert">
                                 {{oreLavorateMiste}}
                             </div>
@@ -154,12 +145,12 @@
                                 <input type="text" [(ngModel)]="oreLavorateMiste" style="width: 50%;" />
                             </div>
                         </div>
-                        <div style="clear: both"></div>
+                        <!-- <div style="clear: both"></div> -->
 
-                        <div style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
+                        <div class="rigaTabella" style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
                             {{titoloDettaglio[1]}}
                         </div>
-                        <div style="width: 70%; float: left;">
+                        <div class="rigaTabella" style="width: 70%; float: left;">
                             <div *ngIf="!modalitaInsert">
                                 {{orePermessiMiste}}
                             </div>
@@ -167,12 +158,12 @@
                                 <input type="text" [(ngModel)]="orePermessiMiste" style="width: 50%;" />
                             </div>
                         </div>
-                        <div style="clear: both"></div>
+                        <!-- <div style="clear: both"></div> -->
 
-                        <div style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
+                        <div class="rigaTabella" style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
                             {{titoloDettaglio[2]}}
                         </div>
-                        <div style="width: 70%; float: left;">
+                        <div class="rigaTabella" style="width: 70%; float: left;">
                             <div *ngIf="!modalitaInsert">
                                 {{oreMalattiaMiste}}
                             </div>
@@ -180,7 +171,7 @@
                                 <input type="text" [(ngModel)]="oreMalattiaMiste" style="width: 50%;" />
                             </div>
                         </div>
-                        <div style="clear: both"></div>
+                        <!-- <div style="clear: both"></div> -->
 
                         <!-- <div style="width: 30%; float: left;">
                             R:
@@ -195,10 +186,10 @@
                         </div>
                         <div style="clear: both"></div> -->
 
-                        <div style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
+                        <div class="rigaTabella" style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
                             {{titoloDettaglio[3]}}
                         </div>
-                        <div style="width: 70%; float: left;">
+                        <div class="rigaTabella" style="width: 70%; float: left;">
                             <div *ngIf="!modalitaInsert">
                                 {{oreSolidarietaMiste}}
                             </div>
@@ -206,14 +197,14 @@
                                 <input type="text" [(ngModel)]="oreSolidarietaMiste" style="width: 50%;" />
                             </div>
                         </div>
-                        <div style="clear: both"></div>
+                        <!-- <div style="clear: both"></div> -->
                     </div>
 
                     <div *ngIf="tipoOre == 1" class="riga">
-                        <div style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
+                        <div class="rigaTabella" style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
                             {{titoloDettaglio[4]}}
                         </div>
-                        <div style="width: 70%; float: left;">
+                        <div class="rigaTabella" style="width: 70%; float: left;">
                             <div *ngIf="!modalitaInsert">
                                 {{oreLavorate}}
                             </div>
@@ -225,10 +216,10 @@
                     <br />
 
                     <div *ngIf="tipoOre == 1 || tipoOre == 5" class="riga">
-                        <div style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
+                        <div class="rigaTabella" style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
                             {{titoloDettaglio[5]}}
                         </div>
-                        <div style="width: 70%; float: left;">
+                        <div class="rigaTabella" style="width: 70%; float: left;">
                             <div *ngIf="!modalitaInsert">
                                 {{datiGiornata.Entrata}}
                             </div>
@@ -240,10 +231,10 @@
                     <br />
 
                     <div *ngIf="tipoOre == 1 || tipoOre == 5" class="riga">
-                        <div style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
+                        <div class="rigaTabella" style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
                             {{titoloDettaglio[6]}}
                         </div>
-                        <div style="width: 70%; float: left;">
+                        <div class="rigaTabella" style="width: 70%; float: left;">
                             <div *ngIf="!modalitaInsert">
                                 {{datiGiornata.Lavoro}}
                             </div>
@@ -261,10 +252,10 @@
                     <br />
 
                     <div *ngIf="tipoOre == 1 || tipoOre == 5" class="riga">
-                        <div style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
+                        <div class="rigaTabella" style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
                             {{titoloDettaglio[7]}}
                         </div>
-                        <div style="width: 70%; float: left;">
+                        <div class="rigaTabella" style="width: 70%; float: left;">
                             <div *ngIf="!modalitaInsert">
                                 {{datiGiornata.Commessa}}
                             </div>
@@ -282,17 +273,7 @@
                 </div>
             </div>
 
-            <div style="width: calc(30% - 14px);
-                float: left;
-                height: calc(100% - 13px);
-                border-left: 1px solid #999;
-                padding: 3px;
-                margin: 3px;
-                border: 1px solid #999;
-                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
-                box-shadow: 1px 1px 8px 0px #000000;
-                background-color: #e8ffeb;
-                border-radius: 3px;">
+            <div class="finestrella" style="width: calc(30% - 14px);">
                 <div style="width: 100%; height: 19px; text-align: center;">
                     <div  class="sfondoTitolo">
                         Tempo
@@ -311,10 +292,10 @@
                             Tempo:
                         </div> -->
                         <div style="width: 100%; float: left;">
-                            <div *ngIf="giornoInserito && !modalitaInsert">
+                            <div class="rigaTabella" *ngIf="giornoInserito && !modalitaInsert">
                                 {{datiGiornata.Tempo}} <span *ngIf="datiGiornata.Gradi">({{datiGiornata.Gradi}}°)</span>
                             </div>
-                            <div *ngIf="modalitaInsert">
+                            <div class="rigaTabella" *ngIf="modalitaInsert">
                                 <div style="width: 30%; float: left;">
                                     {{titoloTempo[0]}}
                                 </div>
@@ -330,35 +311,25 @@
                             </div>
                         </div>
                         <div *ngIf="modalitaInsert">
-                            <div style="width: 30%; float: left;">
+                            <div class="rigaTabella" style="width: 30%; float: left;">
                                 {{titoloTempo[1]}}
                             </div>
-                            <div style="width: 70%; float: left;">
+                            <div class="rigaTabella" style="width: 70%; float: left;">
                                 <input type="text" [(ngModel)]="datiGiornata.Gradi" style="width: 50%;" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="clear: both;"></div>
-        </div>
+            <!-- <div style="clear: both;"></div> -->
+        <!-- </div>
 
-        <div style="width: 100%; height: calc(25% - 12px);
+        <div style="width: 100%; height: calc(25% - 12px); 
             float: left;
             
-            background-color: aliceblue;">
+            background-color: aliceblue;"> -->
             <!-- PRANZO -->
-            <div style="width: calc(50% - 14px);
-                float: left;
-                height: calc(100% - 12px);
-                padding: 3px;
-                overflow: hidden;
-                margin: 3px;
-                border: 1px solid #999;
-                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
-                box-shadow: 1px 1px 8px 0px #000000;
-                background-color: #e8ffeb;
-                border-radius: 3px;">
+            <div class="finestrella" style="width: calc(50% - 14px);">
                 <div style="width: 100%; height: 23px; float: left; text-align: center;" class="sfondoTitolo">
                     Pranzo
                 </div>
@@ -371,13 +342,13 @@
                 >
                     <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.Pranzo && datiGiornata.Pranzo.length > 0">
                         <div *ngFor="let pranzo of datiGiornata.Pranzo">
-                            <div *ngIf="!modalitaInsert">
+                            <div class="rigaTabella" *ngIf="!modalitaInsert">
                                 {{pranzo.Portata}}
                             </div>
                         </div>
                     </div>
 
-                    <div *ngIf="modalitaInsert">
+                    <div class="rigaTabella" *ngIf="modalitaInsert">
                         <div style="width: 40%; float: left; margin-bottom: 3px;">
                             Portata:
                         </div>
@@ -410,17 +381,8 @@
                     </div>
                 </div>
             </div>
-            <div style="width: calc(50% - 15px);
-                float: left;
-                border-left: 1px solid #999;
-                height: calc(100% - 12px);
-                padding: 3px;
-                border: 1px solid #999;
-                background-color: #e8ffeb;
-                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
-                box-shadow: 1px 1px 8px 0px #000000;
-                border-radius: 3px;
-                margin: 3px;">
+
+            <div class="finestrella" style="width: calc(50% - 15px);">
                 <div style="width: 100%; height: 23px; float: left; text-align: center;" class="sfondoTitolo">
                     Pasticca
                 </div>
@@ -430,7 +392,7 @@
                     background-repeat: no-repeat;
                     background-image: url('assets/immagini/pasticca.png');"
                 >
-                    <div *ngIf="tipoOre == 1 && datiGiornata">
+                    <div class="rigaTabella" *ngIf="tipoOre == 1 && datiGiornata">
                         <div *ngIf="!modalitaInsert">
                             {{datiGiornata.Pasticca}}
                         </div>
@@ -455,20 +417,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        <!-- </div>
 
-        <div style="width: 100%; height: 30%; float: left; overflow: hidden; background-color: aliceblue;">
+        <div style="width: 100%; height: 30%; float: left; overflow: hidden; background-color: aliceblue;"> -->
             <!-- MEZZI -->
-            <div style="width: calc(50% - 14px);
-                float: left;
-                height: calc(100% - 12px);
-                padding: 3px;
-                margin: 3px;
-                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
-                box-shadow: 1px 1px 8px 0px #000000;
-                border: 1px solid #999;
-                background-color: #e8ffeb;
-                border-radius: 3px;">
+            <div class="finestrella" style="width: calc(50% - 14px);">
                 <div style="width: 100%; height: 23px; float: left; text-align: center;" class="sfondoTitolo">
                     Mezzi di Andata
                 </div>
@@ -480,13 +433,14 @@
                 >
                     <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.MezziAndata && datiGiornata.MezziAndata.length > 0">
                         <div *ngIf="!modalitaInsert">
-                            <div *ngFor="let mezzo of datiGiornata.MezziAndata">
+                            <div class="rigaTabella" *ngFor="let mezzo of datiGiornata.MezziAndata">
+                                <img src="assets/immagini/mezzi/{{mezzo.Icona}}.png" class="immagineTabella" />&nbsp;
                                 {{mezzo.Mezzo}} {{mezzo.Dettaglio}}
                             </div>
                         </div>
                     </div>
 
-                    <div *ngIf="modalitaInsert">
+                    <div class="rigaTabella" *ngIf="modalitaInsert">
                         <div style="width: 40%; float: left; margin-bottom: 3px;">
                             Mezzo:
                         </div>
@@ -500,6 +454,9 @@
                         
                         <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
                             <tr *ngFor="let mezzo of datiGiornata.MezziAndata; let i = index" [attr.data-index] = "i" class="rigaTabella">
+                                <td>
+                                    <img src="assets/immagini/mezzi/{{mezzo.Icona}}.png" class="immagineTabella" />
+                                </td>
                                 <td>
                                     {{mezzo.Mezzo}}
                                 </td>
@@ -521,17 +478,7 @@
                 </div>
             </div>
 
-            <div style="width: calc(50% - 14px);
-                float: left;
-                border-left: 1px solid #999;
-                height: calc(100% - 12px);
-                padding: 3px;
-                margin: 3px;
-                border: 1px solid #999;
-                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
-                box-shadow: 1px 1px 8px 0px #000000;
-                background-color: #e8ffeb;
-                border-radius: 3px;">
+            <div class="finestrella" style="width: calc(50% - 14px);">
                 <div style="width: 100%; height: 23px; float: left; text-align: center;" class="sfondoTitolo">
                     Mezzi di Ritorno
                 </div>
@@ -544,13 +491,14 @@
                 >
                     <div *ngIf="!modalitaInsert && tipoOre == 1 && datiGiornata && datiGiornata.MezziRitorno && datiGiornata.MezziRitorno.length > 0">
                         <div *ngFor="let mezzo of datiGiornata.MezziRitorno">
-                            <div *ngIf="!modalitaInsert">
-                                {{mezzo.Mezzo}} {{mezzo.Dettaglio}}
+                            <div class="rigaTabella" *ngIf="!modalitaInsert">
+                                <img src="assets/immagini/mezzi/{{mezzo.Icona}}.png" class="immagineTabella" />&nbsp;
+                                {{mezzo.Mezzo}}&nbsp;{{mezzo.Dettaglio}}
                             </div>
                         </div>
                     </div>
 
-                    <div *ngIf="modalitaInsert">
+                    <div class="rigaTabella" *ngIf="modalitaInsert">
                         <div style="width: 40%; float: left; margin-bottom: 3px;">
                             Mezzo:
                         </div>
@@ -564,6 +512,9 @@
                         
                         <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
                             <tr *ngFor="let mezzo of datiGiornata.MezziRitorno; let i = index" [attr.data-index] = "i" class="rigaTabella">
+                                <td>
+                                    <img src="assets/immagini/mezzi/{{mezzo.Icona}}.png" class="immagineTabella" />
+                                </td>
                                 <td>
                                     {{mezzo.Mezzo}}
                                 </td>
@@ -584,19 +535,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        <!-- </div>
 
-        <div style="width: 100%; height: 17%; float: left; overflow: hidden; background-color: aliceblue;">
-            <div style="width: calc(100% - 13px);
-                float: left;
-                height: calc(100% - 12px);
-                padding: 3px;
-                margin: 3px;
-                border: 1px solid #999;
-                -webkit-box-shadow: 1px 1px 8px 0px #000000; 
-                box-shadow: 1px 1px 8px 0px #000000;
-                background-color: #e8ffeb;
-                border-radius: 3px;">
+        <div style="width: 100%; height: 17%; float: left; overflow: hidden; background-color: aliceblue;"> -->
+            <div class="finestrella" style="width: calc(100% - 13px);">
                 <!-- NOTE -->
                 <div style="width: 100%; height: 23px; text-align: center;" class="sfondoTitolo">
                     Note
@@ -614,16 +556,17 @@
                     </div>
                 </div>
             </div>
-        </div>
+        <!-- </div> -->
      </div>
 
     <div class="footer">
         <!-- FOOTER -->
-        <div style="width: 100%; height: calc(100% - 55px); float: left;">
+        <div style="width: 100%; height: calc(100% - 45px); float: left;">
             <div class="blocco" style="background-color: transparent;">
                 <table style="width: 100%; height: 100%;">
                     <tr>
-                        <td style="width: 10%; border: 1px solid #999; border-radius: 5px;"
+                        <td style="width: 10%; border: 1px solid #999; border-radius: 5px; -webkit-box-shadow: 1px 1px 8px 0px #000000;
+                            box-shadow: 1px -2px 3px -1px #000000;"
                             [style.background-position]="immagineSanto ? 'top' : ''"
                             [style.background-size]="immagineSanto ? 'cover' : ''"
                             [style.background-repeat]="immagineSanto ? 'no-repeat' : ''"
@@ -669,20 +612,20 @@
                 </table>
             </div>
         </div>
-        <div style="width: 100%; height: 50px; float: left; padding-top: 3px;">
-            <div style="width: 60px; float: left;">
+        <div style="width: 100%; height: 40px; float: left; padding-top: 3px; border-top: 1px solid #91bd8a;">
+            <div style="width: 50px; float: left;">
                 <img src="assets/immagini/icona_INDIETRO.png" class="immagineIcona" (click)="indietroGiorno()" />
             </div>
-            <div style="width: calc(50% - 60px); float: left;">
+            <div style="width: calc(50% - 50px); float: left;">
                 <img *ngIf="!modalitaInsert" src="assets/immagini/icona_MODIFICA-TAG.png" class="immagineIcona" (click)="apreModifica()" />
                 <img *ngIf="modalitaInsert" src="assets/immagini/icona_SALVA.png" class="immagineIcona" (click)="salvaGiornata()" />
                 <img *ngIf="modalitaInsert" src="assets/immagini/elimina_quadrato.png" class="immagineIcona" (click)="annullaModifica()" />
             </div>
-            <div style="width: calc(50% - 60px); float: left; text-align: right;">
+            <div style="width: calc(50% - 50px); float: left; text-align: right;">
                 <img src="assets/immagini/icona-EQUALIZZATORE.png" class="immagineIcona" (click)="apreImpostazioni()" />
                 <img src="assets/immagini/icona-PLAYLIST.png" class="immagineIcona" (click)="apreStatistiche()" />
             </div>
-            <div style="width: 60px; float: left;">
+            <div style="width: 50px; float: left;">
                 <img src="assets/immagini/icona_AVANTI.png" class="immagineIcona" (click)="avantiGiorno()" />
             </div>
         </div>
@@ -730,12 +673,25 @@
 </div>
 
 <div *ngIf="visuaDescSanto" class="descSanto">
+    <div style="width: calc(100% - 25px);
+        float: left;
+        height: 30px;
+        border-bottom: 1px solid #999;
+        text-align: center;
+        color: red;
+        font-size: 24px;
+        font-family: math;"
+    >
+        {{datiGiornata.Santo}}
+    </div>
+
     <div class="blocco" 
         style="font-size: 18px;
+            float: left;
             width: calc(100% - 30px);
             overflow: auto;
             text-align: left;
-            height: 100%;
+            height: calc(100% - 30px);
             font-family: math;
             padding: 0px;" 
         [innerHTML]="descSanto">
