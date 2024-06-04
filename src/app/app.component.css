@@ -18,7 +18,7 @@
     text-align: center;
     float: left;
     padding: 3px;
-    background-color: #fffba6;
+    background-color: #baf5c3;
     box-shadow: 3px 2px 15px 3px #000000;
     border-bottom: 1px solid #999;
 }
@@ -39,11 +39,13 @@
     text-align: left;
     padding-top: 2px;
     border-top: 1px solid #999;
-    background-color: #fffba6;
+    background-color: #b7f1c0;
 }
 
 .sfondoTitolo {
-    background-color: #f5f1aa;
+    background-color: #c6ffcd;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .immagineWait {
@@ -85,11 +87,12 @@
 }
 
 .titolone {
-    font-size: 53px;
-    color: #ad2900;
+    font-size: 4vw;
+    color: #467d4e;
     cursor: pointer;
     font-family: math;
-    margin-left: 5px;
+    /* margin-left: 5px;
+    white-space: nowrap; */
 }
 
 .rigaTabella {
@@ -142,7 +145,7 @@
 }
 
 .tdDispara {
-    background-color: #f5f1aa;
+    background-color: #c6ffcd;
 }
 
 .tdPara {
@@ -163,4 +166,31 @@
     overflow: auto;
     background-color: #fffdec;
     box-shadow: 3px 2px 15px 3px #000000; 
+}
+
+.visuaImpostazioni {
+    width: auto;
+    height: auto;
+    max-width: 400px;
+    max-height: 300px;
+    left: 30%;
+    top: 20%;
+    position: absolute;
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 3px;
+    background-color: #ffef6b;
+    box-shadow: 3px 2px 15px 3px #000000;
+}
+
+.testoFooter {
+    color: #467d4e;
+    font-weight: bold;
+    font-family: math;
+    font-size: 100%;
+    white-space: nowrap;
+    border: 1px solid #999;
+    border-radius: 3px;
+    background-color: #d1ffd8;
+    text-align: center;
 }

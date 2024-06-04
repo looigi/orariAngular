@@ -9,61 +9,48 @@ import { ApiService } from "../services/api.service";
   })
   
   export class ModificaGiorno implements OnInit, OnChanges {
+    @Input() Utils;
+    @Input() rimetteGiornoSelezionato;
     @Input() dataAttuale;
-    @Input() datiGiornata;
 
-    @Output() visibile: EventEmitter<string> = new EventEmitter<string>();
-
-    nomeGiornoAttuale;
-    dataAttuale2;
-    giornoDellAnno;
-    datiGiornata2;
-    dati;
+    @Output() cambioRicordaGiornoEmit: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(
         private VariabiliGlobali: VariabiliGlobali,
-        private apiService: ApiService
     ) {
     }
 
     ngOnInit(): void {
-        this.leggeDati();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['dataAttuale'] && changes['dataAttuale'].currentValue) {
-            this.dataAttuale2 = changes['dataAttuale'].currentValue;
-            this.nomeGiornoAttuale = this.VariabiliGlobali.getDayName(this.dataAttuale2, "it-IT");
-            this.giornoDellAnno = this.VariabiliGlobali.calcolaGiornoAnno(this.dataAttuale2);    
-        }
-
-        if (changes['datiGiornata'] && changes['datiGiornata'].currentValue) {
-            this.datiGiornata2 = changes['datiGiornata'].currentValue;            
-        }
     }
 
-    chiudeMaschera() {
-        this.visibile.emit(new Date().toString());
+    cambioRicordaGiorno() {
+      this.rimetteGiornoSelezionato = !this.rimetteGiornoSelezionato;
+      localStorage.setItem('RicordaGiorno', this.rimetteGiornoSelezionato ? 'S' : 'N');
+  
+      if (this.rimetteGiornoSelezionato) {
+        const d = localStorage.getItem('DataAttuale');
+        if (d !== null) {
+          this.dataAttuale = new Date(d);
+        } else {
+          this.dataAttuale = new Date();
+        }
+      } else {
+        this.dataAttuale = new Date();
+      }
+  
+      this.cambioRicordaGiornoEmit.emit(this.dataAttuale);
     }
 
-    leggeDati() {
-        this.apiService.ritornaDatiPerGiornata()
-        .map((response: any) => response)
-        .subscribe((data2: string | string[]) => {
-            if (data2) {
-              const data = this.apiService.SistemaStringaRitornata(data2);
-              if (data.indexOf('ERROR') === -1) {
-                if (data) {
-                  console.log(data);
-                  this.dati = JSON.parse(data);
-                } else {
-                  // this.pulisceArray();
-                }
-              } else {
-                // this.pulisceArray();
-              }
-            }
-          }
-        );
-      }    
+    impostaData(e) {
+      console.log('Data impostata', e);
+      this.dataAttuale = new Date(e);
+      if (this.rimetteGiornoSelezionato) {
+        localStorage.setItem('DataAttuale', this.dataAttuale);
+      }
+  
+      this.cambioRicordaGiornoEmit.emit(this.dataAttuale);
+    }  
   }
