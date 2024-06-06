@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { ApiService } from './services/api.service';
 import { HttpClient } from '@angular/common/http';
 import { VariabiliGlobali } from './VariabiliGlobali.component';
+import { Platform } from '@angular/cdk/platform';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ export class AppComponent implements OnInit {
   lavorativi;
   datiGiornata;
   oreLavorate;
+  oreLavorateDesc = '';
   // modificaGiorno = false;
   modalitaInsert = false;
   tipoOre = 1;
@@ -42,6 +44,7 @@ export class AppComponent implements OnInit {
   oreMalattiaMiste = 0;
   appoggioTipoOre;
   appoggioOreLavorate;
+  appoggioOreLavorateDesc;
   descSanto;
   visuaDescSanto = false;
   mostraImpostazioni = false;
@@ -57,22 +60,37 @@ export class AppComponent implements OnInit {
   titoloTipoGiornataLargo = ['Lavoro', 'Ferie', 'Permesso', 'Malattia', 'Altro', 'Smart Working'];
   titoloTipoGiornataStretto = ['L.', 'F.', 'P.', 'M.', 'A.', 'S.W.'];
   titoloDettaglio;
-  titoloDettaglioLargo = ['Ore Lavorate', 'Permessi', 'Malattia', 'Solidarietà', 'Lavorate', 'Entrata', 'Lavoro', 'Commessa'];
-  titoloDettaglioStretto= ['Ore', 'Perm.', 'Mal.', 'Sol.', 'Lav.', 'Entr.', 'Sede', 'Comm.'];
+  titoloDettaglioLargo = ['Ore Lavorate', 'Permessi', 'Malattia', 'Solidarietà', 'Lavorate', 'Entrata', 'Lavoro', 'Commessa', 'Starordinari'];
+  titoloDettaglioStretto= ['Ore', 'Perm.', 'Mal.', 'Sol.', 'Lav.', 'Entr.', 'Sede', 'Comm.', 'Str.'];
   titoloTempo;
   titoloTempoLargo = ['Tempo', 'Gradi'];
   titoloTempoStretto = ['T.', 'Gr.'];
 
+  ricercheVisibili = false;
+  statisticheVisibili = false;
+  impostazioniVisibili = false;
+
   Utils = {
     linkIcone: 'assets'
-}
+  }
+
+  piattaformaAndroid = false;
+
+  PasticcaScelta;
+  CommessaScelta;
+  LavoroScelto;
+  PortataScelta;
+  TempoScelto;
 
   constructor(
     private apiService: ApiService,
     private http: HttpClient,
-    public VariabiliGlobali: VariabiliGlobali
+    public VariabiliGlobali: VariabiliGlobali,
+    public platform: Platform
   ) {
-
+    if (this.platform.ANDROID) {
+      this.piattaformaAndroid = true;
+    }
   }
 
   ngOnInit(): void {
@@ -241,7 +259,11 @@ export class AppComponent implements OnInit {
               this.datiGiornata = JSON.parse(data);
               this.giornoInserito = this.datiGiornata.GiornoInserito;
               const ore = this.datiGiornata.Quante;
-              this.oreLavorate = '';
+              this.oreLavorate = this.datiGiornata.Quante;
+              if (this.oreLavorate < 1) {
+                this.oreLavorate = '';
+              }
+              this.oreLavorateDesc = '';
               if (this.datiGiornata.Pasticca[0] && this.datiGiornata.Pasticca[0].idPasticca) {
                 this.datiGiornata.Pasticca = this.datiGiornata.Pasticca[0].Pasticca;
               }
@@ -400,6 +422,7 @@ export class AppComponent implements OnInit {
       idLavoro: -1
     };
     this.oreLavorate = '';   
+    this.oreLavorateDesc = '';
     this.tipoOre = 0;
     this.commesse = undefined;
   }
@@ -421,6 +444,7 @@ export class AppComponent implements OnInit {
   }
 
   disegnaGiorno() {
+    this.tipoOre = -1;
     this.modalitaInsert = false;
 
     const giorno = this.dataAttuale.getDate();
@@ -465,31 +489,31 @@ export class AppComponent implements OnInit {
     switch (ore) {
       case -1:
         this.tipoOre = -1;
-        this.oreLavorate = 'BOH!';
+        this.oreLavorateDesc = 'BOH!';
         break;
       case -2:
         this.tipoOre = 2;
-        this.oreLavorate = 'Ferie';
+        this.oreLavorateDesc = 'Ferie';
         break;
       case -3:
         this.tipoOre = 3;
-        this.oreLavorate = 'Permesso';
+        this.oreLavorateDesc = 'Permesso';
         break;
       case -4:
         this.tipoOre = 4;
-        this.oreLavorate = 'Malattia';
+        this.oreLavorateDesc = 'Malattia';
         break;
       case -5:
         this.tipoOre = 5;
-        this.oreLavorate = 'Altro';
+        this.oreLavorateDesc = 'Altro';
         break;
       case -6:
         this.tipoOre = 6;
-        this.oreLavorate = 'Smart Working';
+        this.oreLavorateDesc = 'Smart Working';
         break;
       default:
         this.tipoOre = 1;
-        this.oreLavorate = ore;  
+        this.oreLavorateDesc = ore;  
     }
     this.datiGiornata.Quante = ore;
   }
@@ -534,7 +558,7 @@ export class AppComponent implements OnInit {
       this.datiGiornata.MezziAndata = JSON.parse(JSON.stringify(ma));
     }
 
-    if (this.datiGiornata.giornoInserito) {
+    if (!this.datiGiornata.giornoInserito) {
       const mezziRitorno = this.datiGiornata.MezziStandardRitorno;
       const mr = new Array();
       mezziRitorno.forEach(element => {
@@ -556,6 +580,7 @@ export class AppComponent implements OnInit {
     this.datiGiornata.Portate = new Array();
     this.appoggioTipoOre = this.tipoOre;
     this.appoggioOreLavorate = this.oreLavorate;
+    this.appoggioOreLavorateDesc = this.oreLavorateDesc;
 
     console.log('Dati da modificare', this.datiGiornata);
 
@@ -624,7 +649,10 @@ export class AppComponent implements OnInit {
     }
 
     let misti = '';
-    let Ore = this.datiGiornata.Quante;
+    let Ore = this.oreLavorate;
+    if (this.tipoOre !== 1) {
+      Ore = -this.tipoOre;
+    }
     let entrata = this.datiGiornata.Entrata;
     if (this.tipoOre === 5) {
       misti = 'N' + this.oreLavorateMiste + ';P' + this.orePermessiMiste + ';M' + this.oreMalattiaMiste + ';R0;S' + this.oreSolidarietaMiste;
@@ -676,6 +704,7 @@ export class AppComponent implements OnInit {
   annullaModifica() {
     if (!this.giornoInserito) {
       this.oreLavorate = '';
+      this.oreLavorateDesc = '';
       /* this.datiGiornata.Entrata = '';
       this.datiGiornata.idLavoro = -9999;
       this.datiGiornata.Lavoro = '';
@@ -684,41 +713,46 @@ export class AppComponent implements OnInit {
     }
     this.tipoOre = this.appoggioTipoOre;
     this.oreLavorate = this.appoggioOreLavorate;
+    this.oreLavorateDesc = this.appoggioOreLavorateDesc;
     this.datiGiornata = JSON.parse(JSON.stringify(this.appoggioDatiGiornata));
     this.modalitaInsert = false;
   }
 
-  clickLavoro() {
+  clickLavoro(daSelect) {
     // console.log(this.datiGiornata.Lavoro);
     this.dati.Lavori.forEach(element => {
-      if (element.Lavoro === this.datiGiornata.Lavoro) {
+      if (element.Lavoro === this.LavoroScelto) {
         this.datiGiornata.idLavoro = element.idLavoro;
         this.caricaCommesse(true);
       }
     });
   }
 
-  clickCommessa() {
+  clickCommessa(daSelect) {
     this.commesse.forEach(element => {
-      if (element.Descrizione === this.datiGiornata.Commessa) {
+      if (element.Descrizione === this.CommessaScelta) {
         this.datiGiornata.codCommessa = element.idCommessa;
         // console.log('Commessa scelta', this.datiGiornata.codCommessa);
       }
     });
   }
 
-  clickPranzo() {
+  clickPranzo(daSelect) {
+    if (!daSelect) {
+      alert('Pranzo selezionato: ' + this.PortataScelta);
+    }
+
     if (this.datiGiornata.Pranzo) {
       // console.log('Click Pranzo', this.datiGiornata.Pranzo.Portata);      
-      let Portata = this.datiGiornata.Pranzo.Portata;
+      // let Portata = this.datiGiornata.Pranzo.Portata;
       if (!this.datiGiornata.Pranzo) {
         this.datiGiornata.Pranzo = new Array();
       }
       this.dati.Portate.forEach(element => {
-        if (element.Portata === Portata) {
+        if (element.Portata === this.PortataScelta) { // Portata) {
           let ok = true;
           this.datiGiornata.Pranzo.forEach(element => {
-            if (Portata === element.Portata) {
+            if (this.PortataScelta === element.Portata) {
               ok = false;
             }
           });
@@ -733,10 +767,15 @@ export class AppComponent implements OnInit {
     }
   }
 
-  clickPasticca() {
+  clickPasticca(daSelect) {
+    if (!daSelect) {
+
+    }
+    this.datiGiornata.Pasticca = this.PasticcaScelta;
   }
 
-  clickTempo() {
+  clickTempo(daSelect) {
+    this.datiGiornata.Tempo = this.TempoScelto;
   }
 
   eliminaPranzo(p) {
@@ -837,7 +876,7 @@ export class AppComponent implements OnInit {
     this.datiGiornata.MezziRitorno = JSON.parse(JSON.stringify(p2));
   }
 
-  clickAggiungeMezzoAndata() {
+  clickAggiungeMezzoAndata(daSelect) {
     if (this.mezzoAndataScelto) {
       // console.log('Mezzo di ritorno da aggiungere: ', this.mezzoRitornoScelto);
       this.dati.Mezzi.forEach(element => {
@@ -859,7 +898,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  clickAggiungeMezzoRitorno() {
+  clickAggiungeMezzoRitorno(daSelect) {
     if (this.mezzoRitornoScelto) {
       // console.log('Mezzo di ritorno da aggiungere: ', this.mezzoRitornoScelto);
       this.dati.Mezzi.forEach(element => {
@@ -883,10 +922,11 @@ export class AppComponent implements OnInit {
 
   eliminaPasticca() {
     this.datiGiornata.Pasticca = '';
+    this.PasticcaScelta = '';
   }
 
   apreImpostazioni() {
-
+    this.impostazioniVisibili = true;
   }
 
   apreDescSanto() {
@@ -894,10 +934,24 @@ export class AppComponent implements OnInit {
   }
 
   apreStatistiche() {
-    
+    this.statisticheVisibili = true;
   }
 
   apriSettings() {
     this.mostraImpostazioni = true;
+  }
+
+  apreRicerca() {
+    this.ricercheVisibili = true;
+  }
+
+  tornaAOggi() {
+    this.dataAttuale = new Date();
+    this.disegnaGiorno();
+  }
+
+  cambioDataRicerca(e) {
+    this.dataAttuale = e;
+    this.disegnaGiorno();
   }
 }

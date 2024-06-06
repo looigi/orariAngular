@@ -122,6 +122,16 @@ export class ApiService {
 
     return this.effettuaChiamata(url);
   }
+  
+  effettuaRicerca(Nota) {
+    this.variabiliGlobali.CaricamentoInCorso = true;
+
+    const url = this.variabiliGlobali.urlWS + 'Orari.asmx/Ricerca?' +
+      'idUtente=' + this.variabiliGlobali.idUtente + '&' +
+      'Nota=' + Nota;
+
+    return this.effettuaChiamata(url);
+  }
 
   salvaGiornata(parametri) {
     this.variabiliGlobali.CaricamentoInCorso = true;

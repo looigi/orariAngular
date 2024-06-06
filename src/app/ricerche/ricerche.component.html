@@ -1,0 +1,62 @@
+<div class="finestra">
+    <div class="titolo">
+        Ricerche
+    </div>
+    <div class="chiusura" (click)="chiusura()">
+        &nbsp;
+    </div>
+    <div class="corpo">
+        <div style="width: 100%; height: 30px; float: left; border-bottom: 1px solid #999;">
+            <div class="fontarello" style="width: 150px; float: left; margin-top: 4px;">
+                Ricerca
+            </div>
+            <div style="width: calc(100% - 180px); float: left; margin-top: 4px;">
+                <input type="text" [(ngModel)]="nota" class="fontarello" style="width: 75%;" />
+            </div>
+            <div style="width: 30px; float: left;">
+                <img src="assets/immagini/icona_CERCA.png" class="immagine" title="Esegue Ricerca" (click)="ricerca()" />
+            </div>
+        </div>
+
+        <div style="width: 100%; height: calc(100% - 30px); overflow: auto; padding: 3px;">
+            <span *ngIf="!dati" class="fontarello">Nessun dato rilevato</span>
+            <div *ngIf="dati" class="fontarello" style="width: calc(100% - 7px); text-align: right; color: green;">Righe rilevate: {{dati.length}}</div>
+            <table *ngIf="dati" class="fontarello" style="width: 100%; font-size: 15px;" [cellPadding]="1" [cellSpacing]="1">
+                <tr>
+                    <th style="background-color: gray;">
+
+                    </th>
+                    <th style="background-color: gray;">
+                        Giorno
+                    </th>    
+                    <th style="background-color: gray;">
+                        Mese
+                    </th>    
+                    <th style="background-color: gray;">
+                        Anno
+                    </th>
+                    <th style="background-color: gray;">
+                        Nota
+                    </th> 
+                </tr>
+
+                <tr *ngFor="let d of dati">
+                    <td [style.background-color]="!d.Riga ? 'white' : '#d1d1d1'">
+                        <img src="assets/immagini/icona_CERCA.png" class="immagine" title="Esegue Ricerca" (click)="spostaGiorno(d)" />
+                    </td>
+                    <td style="text-align: right;" [style.background-color]="!d.Riga ? 'white' : '#d1d1d1'">
+                        {{d.Giorno}}
+                    </td>
+                    <td [style.background-color]="!d.Riga ? 'white' : '#d1d1d1'">
+                        {{mesi[d.Mese]}}
+                    </td>
+                    <td [style.background-color]="!d.Riga ? 'white' : '#d1d1d1'">
+                        {{d.Anno}}
+                    </td>
+                    <td [style.background-color]="!d.Riga ? 'white' : '#d1d1d1'" [innerHTML]="disegnaNota(d.Nota)">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

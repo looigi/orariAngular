@@ -1,0 +1,51 @@
+.finestra {
+    width: 80%;
+    height: 80%;
+    position: absolute;
+    left: 10%;
+    top: 10%;
+    border: 1px solid #999;
+    border-radius: 5px;
+    padding: 3px;
+    background-color: white;
+    box-shadow: 1px 1px 8px 0px #000000;
+}
+
+.titolo {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 25px;
+    color: red;
+    border-bottom: 1px solid #999;
+    height: 35px;
+    width: calc(100% - 30px);
+    text-align: center;
+    float: left;
+}
+
+.chiusura {
+    width: 30px;
+    height: 35px;
+    background-image: url('./../../assets/immagini/elimina_quadrato.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    float: left;
+    border-bottom: 1px solid #999;
+    cursor: pointer;
+}
+
+.corpo {
+    width: 100%;
+    height: calc(100% - 35px);
+    overflow: hidden;
+    float: left;
+}
+
+.immagine {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.fontarello {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}

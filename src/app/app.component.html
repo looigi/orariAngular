@@ -41,14 +41,19 @@
                         Giorno dell'anno {{giornoDellAnno}}
                     </span>
                 </div> -->
-                <modificagiorno-component
-                    [Utils]="Utils"
-                    [dataAttuale]="dataAttuale"
-                    [rimetteGiornoSelezionato]="rimetteGiornoSelezionato"
+                <div style="width: 230px; float: left;">
+                    <modificagiorno-component
+                        [Utils]="Utils"
+                        [dataAttuale]="dataAttuale"
+                        [rimetteGiornoSelezionato]="rimetteGiornoSelezionato"
 
-                    (cambioRicordaGiornoEmit)="cambioImpostazioni($event)"
-                >
-                </modificagiorno-component>
+                        (cambioRicordaGiornoEmit)="cambioImpostazioni($event)"
+                    >
+                    </modificagiorno-component>
+                </div>
+                <div style="width: 30px; float: left;">
+                    <img src="assets/immagini/icona_REFRESH.png" class="immagine" (click)="tornaAOggi()" />
+                </div>
             </div>
         </div>
     </div>
@@ -71,19 +76,24 @@
                 >
                     <div class="riga">
                         <!-- [style.padding-top]="schermoPiccolo ? '14px' : '36px'" -->
-                        <div *ngIf="!modalitaInsert && tipoOre != 1 && tipoOre != 5" class="riga rigaTabella" style="text-align: center;
-                            font-size: 30px;
-                            color: blue;
-                            white-space: nowrap;
-                            padding-top: 35px;"
+                        <div *ngIf="!modalitaInsert && tipoOre != 1 && tipoOre != 5" class="riga rigaTabella" 
+                            style="text-align: center;
+                                font-size: 30px;
+                                color: blue;
+                                white-space: nowrap;
+                                padding-top: 35px;"
                         >
-                            {{oreLavorate}}
+                            {{oreLavorateDesc}}
                         </div>
     
-                        <div *ngIf="!modalitaInsert && tipoOre == 1" class="riga" >
-                            <span class="rigaTabella">
+                        <div *ngIf="!modalitaInsert && tipoOre == 1" class="rigaTabella"
+                            style="text-align: center;
+                                font-size: 30px;
+                                color: blue;
+                                white-space: nowrap;
+                                padding-top: 35px;"
+                            >
                                 {{titoloTipoGiornata[0]}}
-                            </span>
                         </div>
 
                         <div *ngIf="modalitaInsert" style="opacity: .75;">
@@ -212,6 +222,13 @@
                                 <input type="text" [(ngModel)]="oreLavorate" style="width: 50%;" />
                             </div>
                         </div>
+
+                        <div *ngIf="oreLavorate > 8" class="rigaTabella" style="width: 30%; float: left; white-space: nowrap; overflow: hidden;">
+                            {{titoloDettaglio[8]}}
+                        </div>
+                        <div *ngIf="oreLavorate > 8" class="rigaTabella" style="width: 70%; float: left;">
+                            {{oreLavorate - 8}}
+                        </div>
                     </div>
                     <br />
 
@@ -239,13 +256,21 @@
                                 {{datiGiornata.Lavoro}}
                             </div>
                             <div *ngIf="modalitaInsert">
-                                <select [(ngModel)]="datiGiornata.Lavoro" (click)="clickLavoro()" style="width: 100%;">
-                                    <option *ngFor="let lavori of dati.Lavori" 
-                                        [value]="lavori.Lavoro" 
-                                        [attr.selected]="lavori.idLavoro == datiGiornata.idLavoro ? true : null">
-                                        {{lavori.Lavoro}}
-                                    </option>
-                                </select>
+                                <div style="width: calc(100% - 30px); float: left;">
+                                    <select [(ngModel)]="LavoroScelto" (click)="clickLavoro(true)" style="width: 100%;">
+                                        <option *ngFor="let lavori of dati.Lavori" 
+                                            [value]="lavori.Lavoro" 
+                                            [attr.selected]="lavori.idLavoro == datiGiornata.idLavoro ? true : null">
+                                            {{lavori.Lavoro}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div *ngIf="piattaformaAndroid" style="width: 25px; float: left; margin-left: 3px;">
+                                    <img src="assets/immagini/icona_PLAY.png" class="immagineTabella" (click)="clickLavoro(false)" />
+                                </div>
+                                <div *ngIf="!piattaformaAndroid" style="width: 30px; float: left;">
+                                    &nbsp;
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -260,13 +285,21 @@
                                 {{datiGiornata.Commessa}}
                             </div>
                             <div *ngIf="modalitaInsert">
-                                <select [(ngModel)]="datiGiornata.Commessa" (click)="clickCommessa()" style="width: 100%;">
-                                    <option *ngFor="let c of commesse" 
-                                        [value]="c.Descrizione" 
-                                        [attr.selected]="c.idCommessa == datiGiornata.codCommessa ? true : null">
-                                        {{c.Descrizione}}
-                                    </option>
-                                </select>
+                                <div style="width: calc(100% - 30px); float: left;">
+                                    <select [(ngModel)]="CommessaScelta" (click)="clickCommessa(true)" style="width: 100%;">
+                                        <option *ngFor="let c of commesse" 
+                                            [value]="c.Descrizione" 
+                                            [attr.selected]="c.idCommessa == datiGiornata.codCommessa ? true : null">
+                                            {{c.Descrizione}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div *ngIf="piattaformaAndroid" style="width: 25px; float: left; margin-left: 3px;">
+                                    <img src="assets/immagini/icona_PLAY.png" class="immagineTabella" (click)="clickCommessa(false)" />
+                                </div>
+                                <div *ngIf="!piattaformaAndroid" style="width: 30px; float: left;">
+                                    &nbsp;
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -275,7 +308,7 @@
 
             <div class="finestrella" style="width: calc(30% - 14px);">
                 <div style="width: 100%; height: 19px; text-align: center;">
-                    <div  class="sfondoTitolo">
+                    <div class="sfondoTitolo">
                         Tempo
                     </div>
                 </div>
@@ -300,13 +333,21 @@
                                     {{titoloTempo[0]}}
                                 </div>
                                 <div style="width: 70%; float: left;">
-                                    <select [(ngModel)]="datiGiornata.Tempo" (click)="clickTempo()">
-                                        <option *ngFor="let tempi of dati.Tempi" 
-                                            [value]="tempi.Tempo" 
-                                            [attr.selected]="tempi.Tempo == datiGiornata.Tempo ? true : null">
-                                            {{tempi.Tempo}}
-                                        </option>
-                                    </select>
+                                    <div style="width: calc(100% - 30px); float: left;">
+                                        <select [(ngModel)]="TempoScelto" style="width: 100%;" (click)="clickTempo(true)">
+                                            <option *ngFor="let tempi of dati.Tempi" 
+                                                [value]="tempi.Tempo" 
+                                                [attr.selected]="tempi.Tempo == datiGiornata.Tempo ? true : null">
+                                                {{tempi.Tempo}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div *ngIf="piattaformaAndroid" style="width: 25px; float: left; margin-left: 3px;">
+                                        <img src="assets/immagini/icona_PLAY.png" class="immagineTabella" (click)="clickTempo(false)" />
+                                    </div>
+                                    <div *ngIf="!piattaformaAndroid" style="width: 30px; float: left;">
+                                        &nbsp;
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -353,13 +394,21 @@
                             Portata:
                         </div>
                         <div style="width: 60%; float: left; margin-bottom: 3px;">
-                            <select [(ngModel)]="datiGiornata.Pranzo.Portata" (click)="clickPranzo()" style="width: 100%;">
-                                <option *ngFor="let p of dati.Portate"
-                                    [value]="p.Portata" 
-                                    [attr.selected]="p.Portata == datiGiornata.Pranzo.Portata ? true : null">
-                                    {{p.Portata}}
-                                </option>
-                            </select>
+                            <div style="width: calc(100% - 30px); float: left;">
+                                <select [(ngModel)]="PortataScelta" (click)="clickPranzo(true)" style="width: 100%;">
+                                    <option *ngFor="let p of dati.Portate"
+                                        [value]="p.Portata" 
+                                        [attr.selected]="p.Portata == datiGiornata.Pranzo.Portata ? true : null">
+                                        {{p.Portata}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div *ngIf="piattaformaAndroid" style="width: 25px; float: left; margin-left: 3px;">
+                                <img src="assets/immagini/icona_PLAY.png" class="immagineTabella" (click)="clickPranzo(false)" />
+                            </div>
+                            <div *ngIf="!piattaformaAndroid" style="width: 30px; float: left;">
+                                &nbsp;
+                            </div>
                         </div>
                         
                         <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
@@ -401,13 +450,21 @@
                                 Pasticca:
                             </div>
                             <div style="width: calc(60% - 15px); float: left; margin-bottom: 3px;">
-                                <select [(ngModel)]="datiGiornata.Pasticca" (click)="clickPasticca()" style="width: 100%;">
-                                    <option *ngFor="let p of dati.Pasticche" 
-                                        [value]="p.Pasticca" 
-                                        [attr.selected]="p.Pasticca == datiGiornata.Pasticca ? true : null">
-                                        {{p.Pasticca}}
-                                    </option>
-                                </select>
+                                <div style="width: calc(100% - 30px); float: left;">
+                                    <select [(ngModel)]="PasticcaScelta" (click)="clickPasticca(true)" style="width: 100%;">
+                                        <option *ngFor="let p of dati.Pasticche" 
+                                            [value]="p.Pasticca" 
+                                            [attr.selected]="p.Pasticca == datiGiornata.Pasticca ? true : null">
+                                            {{p.Pasticca}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div *ngIf="piattaformaAndroid" style="width: 25px; float: left; margin-left: 3px;">
+                                    <img src="assets/immagini/icona_PLAY.png" class="immagineTabella" (click)="clickPasticca(false)" />
+                                </div>
+                                <div *ngIf="!piattaformaAndroid" style="width: 30px; float: left;">
+                                    &nbsp;
+                                </div>
                             </div>
                             <div style="width: 30px; float: left; margin-top: -1px; text-align: left;">
                                 <img *ngIf="datiGiornata.Pasticca" src="assets/immagini/icona_ELIMINA-TAG.png" class="immagineTabella" (click)="eliminaPasticca()" />
@@ -445,11 +502,19 @@
                             Mezzo:
                         </div>
                         <div style="width: 60%; float: left; margin-bottom: 3px;">
-                            <select [(ngModel)]="mezzoAndataScelto" (click)="clickAggiungeMezzoAndata()" style="width: 100%;">
-                                <option *ngFor="let m of dati.Mezzi">
-                                    {{m.Mezzo}}&nbsp;{{m.Dettaglio}}
-                                </option>
-                            </select>
+                            <div style="width: calc(100% - 30px); float: left;">
+                                <select [(ngModel)]="mezzoAndataScelto" (click)="clickAggiungeMezzoAndata(true)" style="width: 100%;">
+                                    <option *ngFor="let m of dati.Mezzi">
+                                        {{m.Mezzo}}&nbsp;{{m.Dettaglio}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div *ngIf="piattaformaAndroid" style="width: 25px; float: left; margin-left: 3px;">
+                                <img src="assets/immagini/icona_PLAY.png" class="immagineTabella" (click)="clickAggiungeMezzoAndata(false)" />
+                            </div>
+                            <div *ngIf="!piattaformaAndroid" style="width: 30px; float: left;">
+                                &nbsp;
+                            </div>
                         </div>
                         
                         <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
@@ -503,11 +568,19 @@
                             Mezzo:
                         </div>
                         <div style="width: 60%; float: left; margin-bottom: 3px;">
-                            <select [(ngModel)]="mezzoRitornoScelto" (click)="clickAggiungeMezzoRitorno()" style="width: 100%;">
-                                <option *ngFor="let m of dati.Mezzi">
-                                    {{m.Mezzo}}&nbsp;{{m.Dettaglio}}
-                                </option>
-                            </select>
+                            <div style="width: calc(100% - 30px); float: left;">
+                                <select [(ngModel)]="mezzoRitornoScelto" (click)="clickAggiungeMezzoRitorno(true)" style="width: 100%;">
+                                    <option *ngFor="let m of dati.Mezzi">
+                                        {{m.Mezzo}}&nbsp;{{m.Dettaglio}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div *ngIf="piattaformaAndroid" style="width: 25px; float: left; margin-left: 3px;">
+                                <img src="assets/immagini/icona_PLAY.png" class="immagineTabella" (click)="clickAggiungeMezzoRitorno(true)" />
+                            </div>
+                            <div *ngIf="!piattaformaAndroid" style="width: 30px; float: left;">
+                                &nbsp;
+                            </div>
                         </div>
                         
                         <table style="width: 100%; border-top: 1px solid #999;" cellapdding="0" cellspacing = "0">
@@ -538,7 +611,7 @@
         <!-- </div>
 
         <div style="width: 100%; height: 17%; float: left; overflow: hidden; background-color: aliceblue;"> -->
-            <div class="finestrella" style="width: calc(100% - 13px);">
+            <div class="finestrella" style="width: calc(100% - 13px); height: 20%;">
                 <!-- NOTE -->
                 <div style="width: 100%; height: 23px; text-align: center;" class="sfondoTitolo">
                     Note
@@ -565,10 +638,11 @@
             <div class="blocco" style="background-color: transparent;">
                 <table style="width: 100%; height: 100%;">
                     <tr>
-                        <td style="width: 10%; border: 1px solid #999; border-radius: 5px; -webkit-box-shadow: 1px 1px 8px 0px #000000;
-                            box-shadow: 1px -2px 3px -1px #000000;"
+                        <td style="width: 10%; 
+                            /* border: 1px solid #999; border-radius: 5px; -webkit-box-shadow: 1px 1px 8px 0px #000000;
+                            box-shadow: 1px -2px 3px -1px #000000; */"
                             [style.background-position]="immagineSanto ? 'top' : ''"
-                            [style.background-size]="immagineSanto ? 'cover' : ''"
+                            [style.background-size]="immagineSanto ? 'contain' : ''"
                             [style.background-repeat]="immagineSanto ? 'no-repeat' : ''"
                             [style.background-image]="immagineSanto ? 'url(' + immagineSanto + ')' : ''"
                             (click)="apreDescSanto()"
@@ -612,21 +686,23 @@
                 </table>
             </div>
         </div>
+
         <div style="width: 100%; height: 40px; float: left; padding-top: 3px; border-top: 1px solid #91bd8a;">
             <div style="width: 50px; float: left;">
-                <img src="assets/immagini/icona_INDIETRO.png" class="immagineIcona" (click)="indietroGiorno()" />
+                <img src="assets/immagini/icona_INDIETRO.png" class="immagineIcona" title="Indietro" (click)="indietroGiorno()" />
             </div>
             <div style="width: calc(50% - 50px); float: left;">
-                <img *ngIf="!modalitaInsert" src="assets/immagini/icona_MODIFICA-TAG.png" class="immagineIcona" (click)="apreModifica()" />
-                <img *ngIf="modalitaInsert" src="assets/immagini/icona_SALVA.png" class="immagineIcona" (click)="salvaGiornata()" />
-                <img *ngIf="modalitaInsert" src="assets/immagini/elimina_quadrato.png" class="immagineIcona" (click)="annullaModifica()" />
+                <img *ngIf="!modalitaInsert" src="assets/immagini/icona_MODIFICA-TAG.png" class="immagineIcona" title="Modifica Giornata" (click)="apreModifica()" />
+                <img *ngIf="modalitaInsert" src="assets/immagini/icona_SALVA.png" class="immagineIcona" title="Salva Giornata" (click)="salvaGiornata()" />
+                <img *ngIf="modalitaInsert" src="assets/immagini/elimina_quadrato.png" class="immagineIcona" title="Annulla Modifiche" (click)="annullaModifica()" />
             </div>
             <div style="width: calc(50% - 50px); float: left; text-align: right;">
-                <img src="assets/immagini/icona-EQUALIZZATORE.png" class="immagineIcona" (click)="apreImpostazioni()" />
-                <img src="assets/immagini/icona-PLAYLIST.png" class="immagineIcona" (click)="apreStatistiche()" />
+                <img src="assets/immagini/icona_CERCA.png" class="immagineIcona" title="Ricerche" (click)="apreRicerca()" />
+                <img src="assets/immagini/icona-EQUALIZZATORE.png" class="immagineIcona" title="Impostazioni" (click)="apreImpostazioni()" />
+                <img src="assets/immagini/icona-PLAYLIST.png" class="immagineIcona" title="Statistiche" (click)="apreStatistiche()" />
             </div>
             <div style="width: 50px; float: left;">
-                <img src="assets/immagini/icona_AVANTI.png" class="immagineIcona" (click)="avantiGiorno()" />
+                <img src="assets/immagini/icona_AVANTI.png" class="immagineIcona" title="Avanti" (click)="avantiGiorno()" />
             </div>
         </div>
     </div>
@@ -668,6 +744,8 @@
     >
     </modificagiorno-component>
 
+    <img src="assets/immagini/icona_REFRESH.png" class="immagine" style="position: absolute; right: 35px; top: 0px;"
+        (click)="tornaAOggi()" />
     <img src="assets/immagini/elimina_quadrato.png" class="immagine" style="position: absolute; right: 0px; top: 0px;"
         (click)="mostraImpostazioni = false;" />
 </div>
@@ -701,6 +779,27 @@
         (click)="visuaDescSanto = false;" />
 </div>
 
+<ricerche-component
+    *ngIf="ricercheVisibili"
+
+    (chiusuraEmit)="ricercheVisibili = false;"
+    (dataEmit)="cambioDataRicerca($event)"
+></ricerche-component>
+
+<impostazioni-component
+    *ngIf="impostazioniVisibili"
+
+    (chiusuraEmit)="impostazioniVisibili = false;"
+></impostazioni-component>
+
+<statistiche-component
+    *ngIf="statisticheVisibili"
+
+    (chiusuraEmit)="statisticheVisibili = false;"
+></statistiche-component>
+
 <div *ngIf="VariabiliGlobali.CaricamentoInCorso" class="attenderePrego">
-    <img src="assets/immagini/Processing.gif" class="immagineWait" />
+    <div class="attenderePrego2">
+        <img src="assets/immagini/loading_0001.gif" class="immagineWait" />
+    </div>
 </div>
