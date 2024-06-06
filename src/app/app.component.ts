@@ -726,6 +726,10 @@ export class AppComponent implements OnInit {
         this.caricaCommesse(true);
       }
     });
+
+    if (daSelect) {
+      this.LavoroScelto = '';
+    }
   }
 
   clickCommessa(daSelect) {
@@ -735,13 +739,13 @@ export class AppComponent implements OnInit {
         // console.log('Commessa scelta', this.datiGiornata.codCommessa);
       }
     });
+
+    if (daSelect) {
+      this.CommessaScelta = '';
+    }
   }
 
   clickPranzo(daSelect) {
-    if (!daSelect) {
-      alert('Pranzo selezionato: ' + this.PortataScelta);
-    }
-
     if (this.datiGiornata.Pranzo) {
       // console.log('Click Pranzo', this.datiGiornata.Pranzo.Portata);      
       // let Portata = this.datiGiornata.Pranzo.Portata;
@@ -765,17 +769,26 @@ export class AppComponent implements OnInit {
         }
       });
     }
+
+    if (daSelect) {
+      this.PortataScelta = '';
+    }
   }
 
   clickPasticca(daSelect) {
-    if (!daSelect) {
-
-    }
     this.datiGiornata.Pasticca = this.PasticcaScelta;
+
+    if (daSelect) {
+      this.PasticcaScelta = '';
+    }
   }
 
   clickTempo(daSelect) {
     this.datiGiornata.Tempo = this.TempoScelto;
+    
+    if (daSelect) {
+      this.TempoScelto = '';
+    }
   }
 
   eliminaPranzo(p) {

@@ -132,6 +132,16 @@ export class ApiService {
 
     return this.effettuaChiamata(url);
   }
+  
+  richiamaStatistica(Statistica) {
+    this.variabiliGlobali.CaricamentoInCorso = true;
+
+    const url = this.variabiliGlobali.urlWS + 'Orari.asmx/Statistica?' +
+      'idUtente=' + this.variabiliGlobali.idUtente + '&' +
+      'Tipologia=' + Statistica;
+
+    return this.effettuaChiamata(url);
+  }
 
   salvaGiornata(parametri) {
     this.variabiliGlobali.CaricamentoInCorso = true;

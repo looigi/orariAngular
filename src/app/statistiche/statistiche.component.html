@@ -1,11 +1,32 @@
 <div class="finestra">
     <div class="titolo">
-        Ricerche
+        Statistiche
     </div>
     <div class="chiusura" (click)="chiusura()">
         &nbsp;
     </div>
     <div class="corpo">
-        &nbsp;
+        <div class="listaStat">
+            <table style="width: 100%;" [cellPadding]="1" [cellSpacing]="1">
+                <tr>
+                    <td (click)="ricerca('Portate')">
+                        Portate
+                    </td>
+                    <td (click)="ricerca('Mezzi')">
+                        Mezzi
+                    </td>
+                    <td (click)="ricerca('Pasticche')">
+                        Pasticche
+                    </td>
+                </tr>
+                <tr>
+                    <td (click)="ricerca('Tempo')">
+                        Tempo
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="chartContainer" class="divChart"></div>
     </div>
 </div>

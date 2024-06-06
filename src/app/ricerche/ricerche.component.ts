@@ -81,7 +81,7 @@ export class Ricerche implements OnInit, OnChanges {
   disegnaNota(nt) {
     let n = nt;
 
-    n = this.rimpiazzaTesto(n, "*CRLF*", "");
+    n = this.rimpiazzaTesto(n, "*CRLF*", ". ");
 		n = this.rimpiazzaTesto(n, "*CR*", "");
 		n = this.rimpiazzaTesto(n, "*LF*", "");
 		n = this.rimpiazzaTesto(n, "*2P*", ":");
