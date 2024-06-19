@@ -39,3 +39,23 @@
     overflow: auto;
     float: left;
 }
+
+.immagineTabella {
+    width: 55px;
+    height: 55px;
+    cursor: pointer;
+}
+
+.riga {
+    width: 100%; float: left;
+}
+
+.titolino {
+    width: 30%;
+    float: left;
+}
+
+.dettaglio {
+    width: 70%;
+    float: left;
+}

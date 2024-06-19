@@ -27,4 +27,8 @@ export class Impostazioni implements OnInit, OnChanges {
   chiusura() {
     this.chiusuraEmit.emit(new Date().toString());
   }
+
+  portate() {
+    
+  }
 }

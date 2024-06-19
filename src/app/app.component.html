@@ -337,7 +337,7 @@
                                         <select [(ngModel)]="TempoScelto" style="width: 100%;" (click)="clickTempo(true)">
                                             <option *ngFor="let tempi of dati.Tempi" 
                                                 [value]="tempi.Tempo" 
-                                                [attr.selected]="tempi.Tempo == datiGiornata.Tempo ? true : null">
+                                                [attr.selected]="tempi.Tempo == TempoScelto ? true : null">
                                                 {{tempi.Tempo}}
                                             </option>
                                         </select>

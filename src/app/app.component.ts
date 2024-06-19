@@ -540,7 +540,7 @@ export class AppComponent implements OnInit {
       });
     }
 
-    if (!this.datiGiornata.giornoInserito)  {
+    if (!this.giornoInserito)  {
       const mezziAndata = this.datiGiornata.MezziStandardAndata;
       const ma = new Array();
       mezziAndata.forEach(element => {
@@ -558,7 +558,7 @@ export class AppComponent implements OnInit {
       this.datiGiornata.MezziAndata = JSON.parse(JSON.stringify(ma));
     }
 
-    if (!this.datiGiornata.giornoInserito) {
+    if (!this.giornoInserito) {
       const mezziRitorno = this.datiGiornata.MezziStandardRitorno;
       const mr = new Array();
       mezziRitorno.forEach(element => {
@@ -779,15 +779,16 @@ export class AppComponent implements OnInit {
     this.datiGiornata.Pasticca = this.PasticcaScelta;
 
     if (daSelect) {
-      this.PasticcaScelta = '';
+      // this.PasticcaScelta = '';
     }
   }
 
   clickTempo(daSelect) {
     this.datiGiornata.Tempo = this.TempoScelto;
+    // console.log('Tempo', this.TempoScelto);
     
     if (daSelect) {
-      this.TempoScelto = '';
+      // this.TempoScelto = '';
     }
   }
 
