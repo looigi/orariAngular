@@ -167,4 +167,34 @@ export class ApiService {
 
     return this.effettuaChiamata(url);
   }  
+  
+  richiamaPortate() {
+    this.variabiliGlobali.CaricamentoInCorso = true;
+
+    const url = this.variabiliGlobali.urlWS + 'Orari.asmx/RitornaPortate?' +
+      'idUtente=' + this.variabiliGlobali.idUtente;
+
+    return this.effettuaChiamata(url);
+  }
+
+  eliminaPortata(params) {
+    this.variabiliGlobali.CaricamentoInCorso = true;
+
+    const url = this.variabiliGlobali.urlWS + 'Orari.asmx/EliminaPortata?' +
+      'idUtente=' + this.variabiliGlobali.idUtente +
+      '&idPortata=' + params.idPortata;
+
+      return this.effettuaChiamata(url);
+  }
+
+  salvaPortata(params) {
+    this.variabiliGlobali.CaricamentoInCorso = true;
+
+    const url = this.variabiliGlobali.urlWS + 'Orari.asmx/GestionePortata?' +
+      'idUtente=' + this.variabiliGlobali.idUtente +
+      '&idPortata=' + params.idPortata +
+      '&Portata=' + params.Portata;
+
+      return this.effettuaChiamata(url);
+  }
 }

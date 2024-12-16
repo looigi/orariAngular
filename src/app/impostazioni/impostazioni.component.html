@@ -7,12 +7,69 @@
     </div>
     <div class="corpo">
         <div class="riga">
-            <div class="titolino">
+            <div class="titolino" style="padding-top: 10px;">
                 Portate
             </div>
             <div class="dettaglio">
                 <img src="assets/immagini/portate.png" class="immagineTabella" (click)="portate()" />
             </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="mascheraPortate" class="popupPortate">
+    <div class="titolo">
+        Portate
+    </div>
+    <div class="chiusura" (click)="chiusuraPortate()">
+        &nbsp;
+    </div>
+    <div class="corpo">
+        <span *ngIf="!datiPortate" class="fontarello">Nessun dato rilevato</span>
+        <div *ngIf="datiPortate" class="fontarello" style="width: calc(100% - 7px); text-align: right; color: green;">
+            Righe rilevate: {{datiPortate.length}}&nbsp;
+            <img src="assets/immagini/icona_SALVA.png" class="immagine" title="Esegue Ricerca" (click)="aggiungePortata()" />
+        </div>
+        <table *ngIf="datiPortate" class="fontarello" style="width: 100%; font-size: 15px;" [cellPadding]="1" [cellSpacing]="1">
+            <tr>
+                <th style="background-color: gray;">
+
+                </th>
+                <th style="background-color: gray;">
+
+                </th>
+                <th style="background-color: gray;">
+                    Portata
+                </th>    
+            </tr>
+
+            <tr *ngFor="let d of datiPortate" [style.background-color]="!d.Riga ? 'white' : '#d1d1d1'" >
+                <td style="width: 35px">
+                    <img src="assets/immagini/icona_MODIFICA-TAG.png" class="immagine" title="Esegue Ricerca" (click)="modificaPortata(d)" />
+                </td>
+                <td style="width: 35px">
+                    <img src="assets/immagini/icona_ELIMINA-TAG.png" class="immagine" title="Esegue Ricerca" (click)="eliminaPortata(d)" />
+                </td>
+                <td>
+                    {{d.Portata}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div *ngIf="mascheraModificaPortata" class="popupModificaPortata">
+    <div class="titolo">
+        Portate
+    </div>
+    <div class="chiusura" (click)="mascheraModificaPortata = false">
+        &nbsp;
+    </div>
+    <div class="corpo">
+        <input type="text" [(ngModel)]="rigaSelezionataPortata.Portata" style="width: 90%; margin-top: 10px;" />
+        <hr />
+        <div style="width: 100%; text-align: right;">
+            <img src="assets/immagini/icona_SALVA.png" class="immagine" title="Esegue Ricerca" (click)="salvaPortata()" />
         </div>
     </div>
 </div>

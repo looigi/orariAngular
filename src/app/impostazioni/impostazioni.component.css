@@ -53,9 +53,41 @@
 .titolino {
     width: 30%;
     float: left;
+    font-family: math;
+    font-size: 35px;
 }
 
 .dettaglio {
     width: 70%;
     float: left;
+}
+
+.popupPortate {
+    font-family: math;
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    left: 25%;
+    top: 25%;
+    border: 1px solid #999;
+    border-radius: 5px;
+    padding: 3px;
+    background-color: #fff7d5;
+    box-shadow: 1px 1px 8px 0px #000000;
+    z-index: 1001;
+}
+
+.popupModificaPortata {
+    font-family: math;
+    width: 40%;
+    height: auto;
+    position: absolute;
+    left: 30%;
+    top: 40%;
+    border: 1px solid #999;
+    border-radius: 5px;
+    padding: 3px;
+    background-color: #faffa3;
+    box-shadow: 1px 1px 8px 0px #000000;
+    z-index: 1002;
 }
