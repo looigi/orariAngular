@@ -376,21 +376,24 @@ export class AppComponent implements OnInit {
 
   prendeRicorrenze() {
     const rico = this.datiGiornata.Ricorrenze;
+    // console.log('Ricorrenze:', rico);
     this.ricorrenze = '';
     rico.forEach(element => {
       let desc = element.Descrizione;
-      // while (desc.indexOf('***S***') > -1) {
-      if (desc.indexOf('***S***') > -1) {
+
+      while (desc.indexOf('***S***') > -1) {
         let nome = desc.substring(desc.indexOf('***S***') + 7);
-        nome = nome.substring(0, nome.indexOf('***F***'));
-        while (nome.indexOf(' ') > -1) {
-          nome = nome.replace(' ', '+');
+        console.log('Ricorrenza', nome);
+        if (nome.indexOf('***F***') === -1) {
+          desc = desc.replace('***S***', '');
+        } else {
+          nome = nome.substring(0, nome.indexOf('***F***'));
+          while (nome.indexOf(' ') > -1) {
+            nome = nome.replace(' ', '+');
+          }
+          desc = desc.replace('***S***', '<a href="https://www.google.com/search?q=' + nome + '" target="_blank">');
+          desc = desc.replace('***F***', '</a>');
         }
-        console.log(nome, desc);
-        desc = desc.replace('***S***', '<a href="https://www.google.com/search?q=' + nome + '" target="_blank">');
-      }
-      while (desc.indexOf('***F***') > -1) {
-        desc= desc.replace('***F***', '</a>');
       }
       this.ricorrenze += element.Anno + ': ' + desc + '<br />';
     });
